@@ -1,0 +1,79 @@
+<resources>
+    <string name="app_name">Binomial Tree Pricer</string>
+
+    <string name="price_menu">Pricer</string>
+    <string name="implied_vol_menu">Implied Volatility</string>
+
+    <string name="price_activity_toolbar">Binomial Tree Pricer: Theoreticals</string>
+    <string name="implied_vol_activity_toolbar">Binomial Tree Pricer: Implied Volatility</string>
+
+    <string name="spot_label">Spot Price:</string>
+    <string name="spot_hint">Underlying security value</string>
+    <string name="spot_default">100</string>
+
+    <string name="strike_label">Strike Price:</string>
+    <string name="strike_hint">Option strike price</string>
+    <string name="strike_default">100</string>
+
+    <string name="risk_free_rate_label">Risk-Free Interest Rate (%):</string>
+    <string name="risk_free_rate_hint">Risk-free discounting rate</string>
+    <string name="risk_free_rate_default">-0.1</string>
+
+    <string name="carry_rate_label">Carry Rate (%):</string>
+    <string name="carry_rate_hint">Cost of carrying the option underlying. If there is no borrow rate, use the same value as the risk-free interest rate</string>
+    <string name="carry_rate_default">-0.1</string>
+
+    <string name="volatility_label">Volatility (%):</string>
+    <string name="volatility_hint">Volatility of the underlying security:</string>
+    <string name="volatility_default">30</string>
+
+    <string name="expiry_label">Year Fraction:</string>
+    <string name="expiry_hint">Years from valuation date to option expiry</string>
+    <string name="expiry_default">1</string>
+
+    <string name="option_price_label">Option Price:</string>
+    <string name="option_price_hint">Option Price</string>
+    <string name="option_price_default">12</string>
+
+    <string name="option_type_call">Call</string>
+    <string name="option_type_put">Put</string>
+
+    <string name="tolerance_label">Absolute Tolerance:</string>
+    <string name="tolerance_hint">Absolute Tolerance</string>
+    <string name="tolerance_default">0.00000001</string>
+
+    <string name="output_default">000.0000</string>
+    
+    <string name="call_price_label">Call Price:</string>
+    <string name="call_price_hint">Call Price</string>
+
+    <string name="call_delta_label">Call Delta:</string>
+    <string name="call_delta_hint">Call Delta</string>
+
+    <string name="call_gamma_label">Call Gamma:</string>
+    <string name="call_gamma_hint">Call Gamma</string>
+
+    <string name="call_vega_label">Call Vega:</string>
+    <string name="call_vega_hint">Call Vega</string>
+
+    <string name="put_price_label">Put Price:</string>
+    <string name="put_price_hint">Put Price</string>
+
+    <string name="put_delta_label">Put Delta:</string>
+    <string name="put_delta_hint">Put Delta</string>
+
+    <string name="put_gamma_label">Put Gamma:</string>
+    <string name="put_gamma_hint">Put Gamma</string>
+
+    <string name="put_vega_label">Put Vega:</string>
+    <string name="put_vega_hint">Put Vega</string>
+
+    <string name="implied_volatility_label">Implied Volatility:</string>
+    <string name="implied_volatility_hint">Implied Volatility</string>
+
+    <string name="implied_volatility_iterations_label">Iterations:</string>
+    <string name="implied_volatility_iterations_hint">Iterations</string>
+    
+    
+    <string name="action_settings">Settings</string>
+</resources>
