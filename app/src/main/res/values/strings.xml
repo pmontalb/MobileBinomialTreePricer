@@ -31,6 +31,16 @@
     <string name="expiry_hint">Years from valuation date to option expiry</string>
     <string name="expiry_default">1</string>
 
+    <string name="model_type_label">Model Type:</string>
+    <string name="model_type_hint">Model Type</string>
+    <string-array name="models_array">
+        <item>Cox-Rubinstein-Ross</item>
+        <item>Jarrow-Rudd</item>
+        <item>Tian</item>
+        <item>LeisenReimer</item>
+        <item>Joshi</item>
+    </string-array>
+
     <string name="option_price_label">Option Price:</string>
     <string name="option_price_hint">Option Price</string>
     <string name="option_price_default">12</string>
@@ -73,6 +83,11 @@
 
     <string name="implied_volatility_iterations_label">Iterations:</string>
     <string name="implied_volatility_iterations_hint">Iterations</string>
+
+    <string name="american_options_label">American Exercise</string>
+    <string name="european_options_label">European Exercise</string>
+
+    <string name="run_label">Run</string>
     
     
     <string name="action_settings">Settings</string>
