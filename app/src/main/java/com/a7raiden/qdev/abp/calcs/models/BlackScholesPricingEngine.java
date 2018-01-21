@@ -2,55 +2,150 @@ package com.a7raiden.qdev.abp.calcs.models;
 
 import com.a7raiden.qdev.abp.calcs.data.InputData;
 import com.a7raiden.qdev.abp.calcs.data.OutputData;
+import com.a7raiden.qdev.abp.calcs.data.CachedData;
+
+import static java.lang.Math.sqrt;
 
 /**
  * Created by 7Raiden on 19/01/2018.
  */
 
 public final class BlackScholesPricingEngine extends PricingEngine {
+    private InputData mInputData;
+
+    /**
+     * normCdf(d1)
+     */
+    private double mNd1;
+
+    /**
+     * normCdf(d2)
+     */
+    private double mNd2;
+
+    /**
+     * normCdf(-d1) = 1.0 - N(d1)
+     */
+    private double mNminusD1;
+
+    /**
+     * normCdf(-d2) = 1.0 - N(d2)
+     */
+    private double mNminusD2;
+
+    /**
+     * normPdf(d1)
+     */
+    private double mPd1;
+
+    /**
+     * d1Addend = [-log(K) + (b + .5 * sigma^2) * T] / (sigma * sqrt(T)
+     */
+    private double mD1Addend;
+
+    /**
+     * Cached value for the underlying
+     */
+    private double mCurrentS;
+
+    private CachedData mCachedData;
+
+    private double mOneOverSigmaSqrtTtimesGrowthFactorTimesDiscountFactor;
+    private double mSqrtTtimesGrowthFactorTimesDiscountFactor;
+
+    private double mOneOverSigmaSqrtT;
+
+    /**
+     * Precomputes quantities that do not depend on the underlying value
+     */
+    private void make() {
+        double mHalfSigma2 = .5 * mInputData.mVolatility * mInputData.mVolatility;
+        mD1Addend = ((mInputData.mCarryRate + mHalfSigma2) * mCachedData.mDt - Math.log(mInputData.mStrike)) * mOneOverSigmaSqrtT;
+    }
+
+    /**
+     * update all cached quantities that depend on underlying value
+     */
+    public void update(double S) {
+        mCurrentS = S;
+
+        /*
+          d1 = [log(S / K) + (b + .5 * sigma^2) * T] / (sigma * sqrt(T))
+         */
+        double mD1 = mOneOverSigmaSqrtT * Math.log(mCurrentS) + mD1Addend;
+        /*
+          d2 = d1 - sigma * sqrt(T)
+         */
+        double mD2 = mD1 - mCachedData.mSigmaSqrtDt;
+
+        mNd1 = Stats.normCdf(mD1);
+        mNminusD1 = 1.0 - mNd1;
+
+        mNd2 = Stats.normCdf(mD2);
+        mNminusD2 = 1.0 - mNd2;
+
+        mPd1 = Stats.normPdf(mD1);
+    }
+
     public BlackScholesPricingEngine(InputData inputData) {
         super(inputData);
+        mCachedData = new CachedData();
+
+        mCurrentS = mInputData.mSpot;
+        mCachedData.mDt = mInputData.mExpiry;
+
+	    double sqrtT = sqrt(mCachedData.mDt);
+
+        mCachedData.mSigmaSqrtDt = mInputData.mVolatility * sqrtT;
+        mOneOverSigmaSqrtT = 1.0 / mCachedData.mSigmaSqrtDt;
+
+        mCachedData.mDiscountFactor = Math.exp(-mInputData.mRiskFreeRate * mCachedData.mDt);
+        mCachedData.mGrowthFactor   = Math.exp( mInputData.mCarryRate * mCachedData.mDt);
+
+        mCachedData.mGrowthTimesDiscount = mCachedData.mGrowthFactor * mCachedData.mDiscountFactor;
+        mOneOverSigmaSqrtTtimesGrowthFactorTimesDiscountFactor = mOneOverSigmaSqrtT * mCachedData.mGrowthTimesDiscount;
+        mSqrtTtimesGrowthFactorTimesDiscountFactor = mCachedData.mGrowthTimesDiscount * sqrtT;
+
+        make();
+        update(mCurrentS);
+    }
+
+    public BlackScholesPricingEngine(InputData inputData, CachedData cachedData) {
+        super(inputData);
+        mCachedData = new CachedData(cachedData);
+
+        mOneOverSigmaSqrtT = 1.0 / mCachedData.mSigmaSqrtDt;
+        mOneOverSigmaSqrtTtimesGrowthFactorTimesDiscountFactor = mOneOverSigmaSqrtT * mCachedData.mGrowthTimesDiscount;
+        mSqrtTtimesGrowthFactorTimesDiscountFactor = mCachedData.mGrowthTimesDiscount * mCachedData.mSqrtDt;
+
+        make();
+        update(mCurrentS);
+    }
+
+    protected InputData getInputData() { return mInputData; }
+    protected void setInputData(InputData inputData) { mInputData = inputData; }
+
+    @Override
+    public double[] price(InputData inputData) {
+        double[] ret = new double[2];
+
+        ret[0] = mCachedData.mDiscountFactor * (mCurrentS * mCachedData.mGrowthFactor * mNd1 - mInputData.mStrike * mNd2);
+        ret[1] = mCachedData.mDiscountFactor * (-mCurrentS * mCachedData.mGrowthFactor * mNminusD1 + mInputData.mStrike * mNminusD2);
+
+        return ret;
     }
 
     @Override
-    public OutputData[] compute() {
-        OutputData[] ret = new OutputData[2];
-        ret[0] = new OutputData.Builder().build();
-        ret[1] = new OutputData.Builder().build();
+    public void spatialDerivatives(OutputData callOutputData, OutputData putOutputData) {
+        callOutputData.mDelta = mCachedData.mGrowthTimesDiscount * mNd1;
+        putOutputData.mDelta = -mCachedData.mGrowthTimesDiscount * mNminusD1;
 
-        double discountFactor = Math.exp(-mInputData.mRiskFreeRate * mInputData.mExpiry);
-        double growthFactor = Math.exp(mInputData.mCarryRate * mInputData.mExpiry);
-        double discTimesGrowth = discountFactor * growthFactor;
+        callOutputData.mGamma = putOutputData.mGamma = 1.0 / mCurrentS * mPd1 * mOneOverSigmaSqrtTtimesGrowthFactorTimesDiscountFactor;
+    }
 
-        double sqrtT = Math.sqrt(mInputData.mExpiry);
-        double sigmaSqrtT = mInputData.mVolatility * sqrtT;
-        double oneOverSigmaSqrtT = 1.0 / sigmaSqrtT;
-
-        double d1 = (mInputData.mCarryRate + .5 * mInputData.mVolatility * mInputData.mVolatility);
-        d1 *= mInputData.mExpiry;
-        d1 += Math.log(mInputData.mSpot / mInputData.mStrike);
-        d1 *= oneOverSigmaSqrtT;
-
-        double d2 = d1 - sigmaSqrtT;
-
-        double Nd1 = Stats.normCdf(d1);
-        double NminusD1 = 1.0 - Nd1;
-        double Nd2 = Stats.normCdf(d2);
-        double NminusD2 = 1.0 - Nd2;
-
-        double Pd1 = Stats.normPdf(d1);
-
-        ret[0].mPrice = discountFactor * (mInputData.mSpot * Nd1 - mInputData.mStrike * Nd2);
-        ret[1].mPrice = discountFactor * (-mInputData.mSpot * NminusD1 + mInputData.mStrike * NminusD2);
-
-        ret[0].mDelta = discTimesGrowth * Nd1;
-        ret[1].mDelta = -discTimesGrowth * NminusD1;
-
-        ret[0].mGamma = ret[1].mGamma = 1.0 / mInputData.mSpot * Pd1 * oneOverSigmaSqrtT * discTimesGrowth;
-
-        ret[0].mVega = ret[1].mVega = mInputData.mSpot * sqrtT * discTimesGrowth * Pd1;
-
-        return ret;
+    @Override
+    public void vega(OutputData callOutputData, OutputData putOutputData) {
+        callOutputData.mVega = putOutputData.mVega = mCurrentS * mSqrtTtimesGrowthFactorTimesDiscountFactor * mPd1;
     }
 
     private static class Stats {
@@ -80,7 +175,7 @@ public final class BlackScholesPricingEngine extends PricingEngine {
         }
 
         private static double normPdf(double x) {
-            return 1.0 / Math.sqrt(2.0 * Math.PI) * Math.exp(-.5 * x * x);
+            return 1.0 / sqrt(2.0 * Math.PI) * Math.exp(-.5 * x * x);
         }
     }
 }

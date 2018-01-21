@@ -8,17 +8,17 @@ public class TreeInputData extends InputData {
     /**
      * Number of nodes in the tree
      */
-    int mNodes;
+    public int mNodes;
 
     /**
      * Payoff smoothing: if true, the last Backward Induction step will be smoothed with Black-Scholes
      */
-    boolean mSmoothing;
+    public boolean mSmoothing;
 
     /**
      * Acceleration: if true, it tries (depending on interest rates) to smooth the payoff as much as possible
      */
-    boolean mAcceleration;
+    public boolean mAcceleration;
 
     public TreeInputData(Builder builder) {
         super(builder);
@@ -32,6 +32,13 @@ public class TreeInputData extends InputData {
         this.mNodes = rhs.mNodes;
         this.mSmoothing = rhs.mSmoothing;
         this.mAcceleration = rhs.mAcceleration;
+    }
+
+    public TreeInputData(InputData rhs, int nodes, boolean smoothing, boolean acceleration) {
+        super(rhs);
+        this.mNodes = nodes;
+        this.mSmoothing = smoothing;
+        this.mAcceleration = acceleration;
     }
 
     public static class Builder extends InputData.Builder {

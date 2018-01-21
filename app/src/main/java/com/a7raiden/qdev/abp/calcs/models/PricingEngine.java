@@ -11,18 +11,19 @@ import com.a7raiden.qdev.abp.calcs.interfaces.IPricingEngine;
 
 public abstract class PricingEngine implements IPricingEngine {
 
-    protected final InputData mInputData;
-
     PricingEngine(InputData inputData) {
-        mInputData = inputData;
+        setInputData(inputData);
     }
+
+    protected abstract InputData getInputData();
+    protected abstract void setInputData(InputData inputData);
 
     public static PricingEngine create(ModelType modelType, InputData inputData) {
         switch (modelType) {
             case BlackScholes:
                 return new BlackScholesPricingEngine(inputData);
             case CoxRubinsteinRoss:
-                break;
+                return new BinomialTreePricingEngine(inputData);
             case JarrowRudd:
                 break;
             case Tian:
@@ -38,32 +39,55 @@ public abstract class PricingEngine implements IPricingEngine {
         return null;
     }
 
-    protected double price(InputData inputData) { return 0.0; }
+    @Override
+    public OutputData[] compute() {
+        OutputData[] ret = new OutputData[2];
+        for (int i = 0; i < ret.length; ++i) {
+            ret[i] = new OutputData.Builder().build();
+        }
 
-    protected void spatialDerivatives(OutputData outputData) {
-        InputData temp = new InputData(mInputData);
+        double[] price = price(getInputData());
+        ret[0].mPrice = price[0];
+        ret[1].mPrice = price[1];
+
+        spatialDerivatives(ret[0], ret[1]);
+
+        vega(ret[0], ret[1]);
+
+        return ret;
+    }
+
+    public abstract double[] price(InputData inputData);
+
+    public void spatialDerivatives(OutputData callOutputData, OutputData putOutputData) {
+        InputData temp = new InputData(getInputData());
         double spotIncrement = 1e-4;
 
         temp.mSpot += spotIncrement;
-        double priceUp = price(temp);
+        double[] priceUp = price(temp);
 
         temp.mSpot -= 2.0 * spotIncrement;
-        double priceDn = price(temp);
+        double[] priceDn = price(temp);
 
-        outputData.mDelta = (priceUp - priceDn) / (2.0 * spotIncrement);
-        outputData.mGamma = (priceUp -2.0 * outputData.mPrice + priceDn) / (spotIncrement * spotIncrement);
+        callOutputData.mDelta = (priceUp[0] - priceDn[0]) / (2.0 * spotIncrement);
+        callOutputData.mGamma = (priceUp[0] -2.0 * callOutputData.mPrice + priceDn[0]) / (spotIncrement * spotIncrement);
+
+        putOutputData.mDelta = (priceUp[1] - priceDn[1]) / (2.0 * spotIncrement);
+        putOutputData.mGamma = (priceUp[1] -2.0 * putOutputData.mPrice + priceDn[1]) / (spotIncrement * spotIncrement);
     }
 
-    protected void vega(OutputData outputData) {
-        InputData temp = new InputData(mInputData);
+    public void vega(OutputData callOutputData, OutputData putOutputData) {
+        InputData temp = new InputData(getInputData());
         double vegaIncrement = 1e-4;
 
         temp.mVolatility += vegaIncrement;
-        double priceUp = price(temp);
+        double[] priceUp = price(temp);
 
         temp.mVolatility -= 2.0 * vegaIncrement;
-        double priceDn = price(temp);
+        double[] priceDn = price(temp);
 
-        outputData.mVega = (priceUp - priceDn) / (2.0 * vegaIncrement);
+        callOutputData.mVega = (priceUp[0] - priceDn[0]) / (2.0 * vegaIncrement);
+        putOutputData.mVega = (priceUp[1] - priceDn[1]) / (2.0 * vegaIncrement);
+
     }
 }
