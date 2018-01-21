@@ -46,14 +46,14 @@
                     android:orientation="horizontal">
 
                     <RadioButton
-                        android:id="@+id/radio_pirates"
+                        android:id="@+id/callRadioButton"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:checked="true"
                         android:text="@string/option_type_call" />
 
                     <RadioButton
-                        android:id="@+id/radio_ninjas"
+                        android:id="@+id/putRadioButton"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/option_type_put" />
@@ -66,14 +66,14 @@
                     app:layout_constraintTop_toTopOf="parent">
 
                     <TextView
-                        android:id="@+id/volatilityTextView"
+                        android:id="@+id/optionPriceView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/option_price_label"
                         android:textAppearance="@style/TextAppearance.AppCompat" />
 
                     <EditText
-                        android:id="@+id/volatilityEditText"
+                        android:id="@+id/optionPriceEditText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
@@ -95,14 +95,14 @@
                     app:layout_constraintTop_toTopOf="parent">
 
                     <TextView
-                        android:id="@+id/spotTextView"
+                        android:id="@+id/spotTextViewIv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/spot_label"
                         android:textAppearance="@style/TextAppearance.AppCompat" />
 
                     <EditText
-                        android:id="@+id/spotEditText"
+                        android:id="@+id/spotIvEditTextIv"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
@@ -122,14 +122,14 @@
                     app:layout_constraintTop_toTopOf="parent">
 
                     <TextView
-                        android:id="@+id/strikeTextView"
+                        android:id="@+id/strikeTextViewIv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/strike_label"
                         android:textAppearance="@style/TextAppearance.AppCompat" />
 
                     <EditText
-                        android:id="@+id/strikeEditText"
+                        android:id="@+id/strikeEditTextIv"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
@@ -150,14 +150,14 @@
                     app:layout_constraintTop_toTopOf="parent">
 
                     <TextView
-                        android:id="@+id/riskFreeRateTextView"
+                        android:id="@+id/riskFreeRateTextViewIv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/risk_free_rate_label"
                         android:textAppearance="@style/TextAppearance.AppCompat" />
 
                     <EditText
-                        android:id="@+id/riskFreeRateEditText"
+                        android:id="@+id/riskFreeRateEditTextIv"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
@@ -178,14 +178,14 @@
                     app:layout_constraintTop_toTopOf="parent">
 
                     <TextView
-                        android:id="@+id/carryRateTextView"
+                        android:id="@+id/carryRateTextViewIv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/carry_rate_label"
                         android:textAppearance="@style/TextAppearance.AppCompat" />
 
                     <EditText
-                        android:id="@+id/carryRateEditText"
+                        android:id="@+id/carryRateEditTextIv"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
@@ -206,14 +206,14 @@
                     app:layout_constraintTop_toTopOf="parent">
 
                     <TextView
-                        android:id="@+id/expiryTextView"
+                        android:id="@+id/expiryTextViewIv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/expiry_label"
                         android:textAppearance="@style/TextAppearance.AppCompat" />
 
                     <EditText
-                        android:id="@+id/expiryEditText"
+                        android:id="@+id/expiryEditTextIv"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"

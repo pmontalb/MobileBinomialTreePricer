@@ -15,6 +15,8 @@ public final class BlackScholesPricingEngine extends PricingEngine {
     @Override
     public OutputData[] compute() {
         OutputData[] ret = new OutputData[2];
+        ret[0] = new OutputData.Builder().build();
+        ret[1] = new OutputData.Builder().build();
 
         double discountFactor = Math.exp(-mInputData.mRiskFreeRate * mInputData.mExpiry);
         double growthFactor = Math.exp(mInputData.mCarryRate * mInputData.mExpiry);
@@ -42,7 +44,7 @@ public final class BlackScholesPricingEngine extends PricingEngine {
         ret[1].mPrice = discountFactor * (-mInputData.mSpot * NminusD1 + mInputData.mStrike * NminusD2);
 
         ret[0].mDelta = discTimesGrowth * Nd1;
-        ret[1].mDelta = discTimesGrowth * NminusD1;
+        ret[1].mDelta = -discTimesGrowth * NminusD1;
 
         ret[0].mGamma = ret[1].mGamma = 1.0 / mInputData.mSpot * Pd1 * oneOverSigmaSqrtT * discTimesGrowth;
 

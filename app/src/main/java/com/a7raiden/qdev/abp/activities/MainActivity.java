@@ -14,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.a7raiden.qdev.abp.R;
 
@@ -23,6 +24,8 @@ import com.a7raiden.qdev.abp.calcs.data.ModelType;
 import com.a7raiden.qdev.abp.calcs.data.OutputData;
 import com.a7raiden.qdev.abp.calcs.interfaces.IPricingEngine;
 import com.a7raiden.qdev.abp.calcs.models.PricingEngine;
+
+import java.text.DecimalFormat;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -66,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 IPricingEngine pe = PricingEngine.create(ModelType.BlackScholes, getInputData());
                 OutputData[] europeanOutputs = pe.compute();
-                populateOutputData(europeanOutputs[0], europeanOutputs[1]);
+                populateOutputData(null, null, europeanOutputs[0], europeanOutputs[1]);
             }
         });
     }
@@ -94,11 +97,48 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private InputData getInputData() {
-        return null;
+        String[] names = { "spot", "strike", "riskFreeRate", "carryRate", "volatility", "expiry" };
+        double[] values = new double[names.length];
+        for (int i = 0; i < names.length; ++i) {
+            EditText editText = findViewById(getResources().getIdentifier(
+                    names[i] + "EditText",
+                    "id",
+                    this.getApplicationContext().getPackageName()));
+            values[i] = Double.parseDouble(editText.getText().toString());
+        }
+
+        return new InputData.Builder()
+                .spot(values[0])
+                .strike(values[1])
+                .riskFreeRate(values[2] * 0.01)
+                .carryRate(values[3] * 0.01)
+                .volatility(values[4] * 0.01)
+                .expiry(values[5])
+                .build();
     }
 
     private void populateOutputData(
-            OutputData europeanCallData, OutputData putData) {
+            OutputData americanCallData, OutputData americanPutData,
+            OutputData europeanCallData, OutputData europeanPutData) {
 
+        TextView europeanCallPrice = findViewById(R.id.outputEuropeanCallPriceTextView);
+        europeanCallPrice.setText(new DecimalFormat("#0.0000").format(europeanCallData.mPrice));
+        TextView europeanPutPrice = findViewById(R.id.outputEuropeanPutPriceTextView);
+        europeanPutPrice.setText(new DecimalFormat("#0.0000").format(europeanPutData.mPrice));
+
+        TextView europeanCallDelta = findViewById(R.id.outputEuropeanCallDeltaTextView);
+        europeanCallDelta.setText(new DecimalFormat("#0.0000").format(europeanCallData.mDelta));
+        TextView europeanPutDelta = findViewById(R.id.outputEuropeanPutDeltaTextView);
+        europeanPutDelta.setText(new DecimalFormat("#0.0000").format(europeanPutData.mDelta));
+
+        TextView europeanCallGamma = findViewById(R.id.outputEuropeanCallGammaTextView);
+        europeanCallGamma.setText(new DecimalFormat("#0.0000").format(europeanCallData.mGamma));
+        TextView europeanPutGamma = findViewById(R.id.outputEuropeanPutGammaTextView);
+        europeanPutGamma.setText(new DecimalFormat("#0.0000").format(europeanPutData.mGamma));
+
+        TextView europeanCallVega = findViewById(R.id.outputEuropeanCallVegaTextView);
+        europeanCallVega.setText(new DecimalFormat("#0.0000").format(europeanCallData.mVega));
+        TextView europeanPutVega = findViewById(R.id.outputEuropeanPutVegaTextView);
+        europeanPutVega.setText(new DecimalFormat("#0.0000").format(europeanPutData.mVega));
     }
 }
