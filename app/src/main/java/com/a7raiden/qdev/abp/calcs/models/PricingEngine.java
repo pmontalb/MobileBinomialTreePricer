@@ -23,20 +23,18 @@ public abstract class PricingEngine implements IPricingEngine {
             case BlackScholes:
                 return new BlackScholesPricingEngine(inputData);
             case CoxRubinsteinRoss:
-                return new BinomialTreePricingEngine(inputData);
+                return new CoxRubinsteinRossBinomialTree(inputData);
             case JarrowRudd:
-                break;
+                return new JarrowRuddBinomialTree(inputData);
             case Tian:
-                break;
+                return new TianBinomialTree(inputData);
             case LeisenReimer:
-                break;
+                return new LeisenReimerBinomialTree(inputData);
             case Joshi:
-                break;
+                return new JoshiBinomialTree(inputData);
             default:
                 throw new IllegalArgumentException();
         }
-
-        return null;
     }
 
     @Override
