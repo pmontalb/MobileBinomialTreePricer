@@ -22,6 +22,7 @@ import com.a7raiden.qdev.abp.adapters.SectionsPagerAdapter;
 import com.a7raiden.qdev.abp.calcs.data.InputData;
 import com.a7raiden.qdev.abp.calcs.data.ModelType;
 import com.a7raiden.qdev.abp.calcs.data.OutputData;
+import com.a7raiden.qdev.abp.calcs.data.TreeInputData;
 import com.a7raiden.qdev.abp.calcs.interfaces.IPricingEngine;
 import com.a7raiden.qdev.abp.calcs.models.PricingEngine;
 
@@ -64,14 +65,24 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
 
         Button runButton = findViewById(R.id.runButton);
-        runButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                IPricingEngine pe = PricingEngine.create(ModelType.BlackScholes, getInputData());
-                OutputData[] europeanOutputs = pe.compute();
-                populateOutputData(null, null, europeanOutputs[0], europeanOutputs[1]);
-            }
+        runButton.setOnClickListener((View view) -> {
+            int currentItem = mViewPager.getCurrentItem();
+            if (currentItem == 0)
+                runBinomialTree();
+            else if (currentItem == 1)
+                runImpliedVolatility();
         });
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+
+        if (hasFocus) {
+            // fills up the default values
+            runBinomialTree();
+            runImpliedVolatility();
+        }
     }
 
     @Override
@@ -94,6 +105,31 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void runBinomialTree() {
+        String modelTypeString =((Spinner)findViewById(R.id.modelSpinner)).getSelectedItem().toString();
+        modelTypeString = modelTypeString
+                .replace("-", "")
+                .replace(" ", "");
+        ModelType modelType = ModelType.valueOf(modelTypeString);
+        InputData inputData = getInputData();
+
+        // TODO: read from settings
+        final int nodes = 80;
+        final boolean smoothing = true;
+        final boolean acceleration = true;
+        TreeInputData treeInputData = new TreeInputData(inputData, nodes, smoothing, acceleration);
+        IPricingEngine pe = PricingEngine.create(modelType, treeInputData);
+        OutputData[] americanOutputs = pe.compute();
+
+        IPricingEngine bs = PricingEngine.create(ModelType.BlackScholes, inputData);
+        OutputData[] europeanOutputs = bs.compute();
+        populateOutputData(americanOutputs[0], americanOutputs[1], europeanOutputs[0], europeanOutputs[1]);
+    }
+
+    private void runImpliedVolatility() {
+
     }
 
     private InputData getInputData() {
@@ -120,6 +156,26 @@ public class MainActivity extends AppCompatActivity {
     private void populateOutputData(
             OutputData americanCallData, OutputData americanPutData,
             OutputData europeanCallData, OutputData europeanPutData) {
+
+        TextView americanCallPrice = findViewById(R.id.outputAmericanCallPriceTextView);
+        americanCallPrice.setText(new DecimalFormat("#0.0000").format(americanCallData.mPrice));
+        TextView americanPutPrice = findViewById(R.id.outputAmericanPutPriceTextView);
+        americanPutPrice.setText(new DecimalFormat("#0.0000").format(americanPutData.mPrice));
+
+        TextView americanCallDelta = findViewById(R.id.outputAmericanCallDeltaTextView);
+        americanCallDelta.setText(new DecimalFormat("#0.0000").format(americanCallData.mDelta));
+        TextView americanPutDelta = findViewById(R.id.outputAmericanPutDeltaTextView);
+        americanPutDelta.setText(new DecimalFormat("#0.0000").format(americanPutData.mDelta));
+
+        TextView americanCallGamma = findViewById(R.id.outputAmericanCallGammaTextView);
+        americanCallGamma.setText(new DecimalFormat("#0.0000").format(americanCallData.mGamma));
+        TextView americanPutGamma = findViewById(R.id.outputAmericanPutGammaTextView);
+        americanPutGamma.setText(new DecimalFormat("#0.0000").format(americanPutData.mGamma));
+
+        TextView americanCallVega = findViewById(R.id.outputAmericanCallVegaTextView);
+        americanCallVega.setText(new DecimalFormat("#0.0000").format(americanCallData.mVega));
+        TextView americanPutVega = findViewById(R.id.outputAmericanPutVegaTextView);
+        americanPutVega.setText(new DecimalFormat("#0.0000").format(americanPutData.mVega));
 
         TextView europeanCallPrice = findViewById(R.id.outputEuropeanCallPriceTextView);
         europeanCallPrice.setText(new DecimalFormat("#0.0000").format(europeanCallData.mPrice));

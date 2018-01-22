@@ -12,9 +12,9 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/output_iv"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintStart_toStartOf="parent">
 
         <ScrollView
             android:layout_width="match_parent"
@@ -271,7 +271,7 @@
                     <Spinner
                         android:id="@+id/modelSpinner"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="32dp"
                         android:layout_weight="1" />
 
 
@@ -282,71 +282,164 @@
 
     </LinearLayout>
 
-    <TableLayout
+    <LinearLayout
         android:id="@+id/output_iv"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:stretchColumns="*"
+        android:background="@drawable/border"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/input_iv">
 
-        <TableRow
+        <TableLayout
+            android:id="@+id/outputAmerican"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:stretchColumns="*">
 
             <TextView
-                android:id="@+id/impliedVolatilityLabelTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/border"
-                android:paddingEnd="4dp"
-                android:paddingStart="4dp"
-                android:text="@string/implied_volatility_label"
+                android:text="@string/american_options_label"
+                android:textAlignment="center"
                 android:textAppearance="@style/TextAppearance.AppCompat"
                 android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/impliedVolatilityTextView"
+            <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/border"
-                android:paddingEnd="4dp"
-                android:paddingStart="4dp"
-                android:text="@string/output_default"
-                android:textAlignment="viewStart"
-                android:textAppearance="@style/TextAppearance.AppCompat" />
-        </TableRow>
+                android:layout_height="match_parent">
 
-        <TableRow
+                <TextView
+                    android:id="@+id/outputAmericanImpliedVolatilityLabelTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/border"
+                    android:paddingEnd="4dp"
+                    android:paddingStart="4dp"
+                    android:text="@string/implied_volatility_label"
+                    android:textAppearance="@style/TextAppearance.AppCompat"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/outputAmericanImpliedVolatilityTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/border"
+                    android:paddingEnd="4dp"
+                    android:paddingStart="4dp"
+                    android:text="@string/output_default"
+                    android:textAlignment="center"
+                    android:textAppearance="@style/TextAppearance.AppCompat" />
+
+                <TextView
+                    android:id="@+id/outputAmericanIterationLabelTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/border"
+                    android:paddingEnd="4dp"
+                    android:paddingStart="4dp"
+                    android:text="@string/implied_volatility_iterations_label"
+                    android:textAppearance="@style/TextAppearance.AppCompat"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/outputIterationTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/border"
+                    android:paddingEnd="4dp"
+                    android:paddingStart="4dp"
+                    android:text="@string/output_default"
+                    android:textAlignment="center"
+                    android:textAppearance="@style/TextAppearance.AppCompat" />
+            </TableRow>
+
+        </TableLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/border"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/output_iv">
+
+        <TableLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:stretchColumns="*"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/outputAmerican">
 
             <TextView
-                android:id="@+id/nIterationsLabelTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/border"
-                android:paddingEnd="4dp"
-                android:paddingStart="4dp"
-                android:text="@string/implied_volatility_iterations_label"
+                android:text="@string/european_options_label"
+                android:textAlignment="center"
                 android:textAppearance="@style/TextAppearance.AppCompat"
                 android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/nIterationsTextView"
+            <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/border"
-                android:paddingEnd="4dp"
-                android:paddingStart="4dp"
-                android:text="@string/output_default"
-                android:textAlignment="viewStart"
-                android:textAppearance="@style/TextAppearance.AppCompat" />
-        </TableRow>
-    </TableLayout>
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/outputEuropeanImpliedVolatilityLabelTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/border"
+                    android:paddingEnd="4dp"
+                    android:paddingStart="4dp"
+                    android:text="@string/implied_volatility_label"
+                    android:textAppearance="@style/TextAppearance.AppCompat"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/outputEuropeanImpliedVolatilityTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/border"
+                    android:paddingEnd="4dp"
+                    android:paddingStart="4dp"
+                    android:text="@string/output_default"
+                    android:textAlignment="center"
+                    android:textAppearance="@style/TextAppearance.AppCompat" />
+
+                <TextView
+                    android:id="@+id/outputEuropeanIterationLabelTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/border"
+                    android:paddingEnd="4dp"
+                    android:paddingStart="4dp"
+                    android:text="@string/implied_volatility_iterations_label"
+                    android:textAppearance="@style/TextAppearance.AppCompat"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/outputEuropeanIterationTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/border"
+                    android:paddingEnd="4dp"
+                    android:paddingStart="4dp"
+                    android:text="@string/output_default"
+                    android:textAlignment="center"
+                    android:textAppearance="@style/TextAppearance.AppCompat" />
+            </TableRow>
+        </TableLayout>
+
+    </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

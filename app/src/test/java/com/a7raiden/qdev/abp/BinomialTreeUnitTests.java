@@ -1,12 +1,9 @@
 package com.a7raiden.qdev.abp;
 
-import android.view.Display;
-
 import com.a7raiden.qdev.abp.calcs.data.InputData;
 import com.a7raiden.qdev.abp.calcs.data.ModelType;
 import com.a7raiden.qdev.abp.calcs.data.OutputData;
 import com.a7raiden.qdev.abp.calcs.data.TreeInputData;
-import com.a7raiden.qdev.abp.calcs.interfaces.IPricingEngine;
 import com.a7raiden.qdev.abp.calcs.models.BinomialTreePricingEngine;
 import com.a7raiden.qdev.abp.calcs.models.BlackScholesPricingEngine;
 import com.a7raiden.qdev.abp.calcs.models.PricingEngine;
@@ -93,6 +90,48 @@ public class BinomialTreeUnitTests {
 
             assertTrue(bsOutputData[1].mPrice < outputData[1].mPrice);
             assertTrue(-bsOutputData[1].mDelta < -outputData[1].mDelta);
+        }
+    }
+
+    @Test
+    public void convergence() throws Exception {
+        for (ModelType modelType : ModelType.values()) {
+            int nodes = 50;
+
+            double[] currentError = new double[3];  // gamma can be unstable and not exhibiting the rate of convergence
+            for (int iteration = 0; iteration < 4; ++iteration) {
+                nodes *= 2;
+                if (modelType == ModelType.BlackScholes || modelType == ModelType.Null)
+                    continue;
+                InputData inputData = new TreeInputData.Builder()
+                        .spot(100.0)
+                        .strike(100.0)
+                        .riskFreeRate(0.05)
+                        .carryRate(.05)
+                        .volatility(.30)
+                        .expiry(2.0)
+                        .modelType(modelType)
+                        .build();
+                TreeInputData treeInputData = new TreeInputData(inputData, nodes, true, false);
+                PricingEngine pe = PricingEngine.create(modelType, treeInputData);
+
+                BlackScholesPricingEngine bs = new BlackScholesPricingEngine(inputData);
+                OutputData[] bsOutputData = bs.compute();
+                OutputData[] outputData = pe.compute();
+
+                double[] previousError = currentError.clone();
+                currentError[0] = bsOutputData[0].mPrice / outputData[0].mPrice - 1.0;
+                currentError[1] = bsOutputData[0].mDelta / outputData[0].mDelta - 1.0;
+                currentError[2] = bsOutputData[0].mVega / outputData[0].mVega - 1.0;
+
+                if (iteration == 0)
+                    continue;
+
+                for (int j = 0; j < currentError.length; ++j) {
+                    assertTrue("j=" + String.valueOf(j) + " | m=" + modelType.toString() + " | " + String.valueOf(currentError[j]) + " | " + String.valueOf(previousError[j]),
+                            Math.abs(currentError[j]) < Math.abs(previousError[j]) + 1e-4);
+                }
+            }
         }
     }
 }

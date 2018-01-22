@@ -131,12 +131,12 @@ public abstract class BinomialTreePricingEngine extends PricingEngine {
             BlackScholesPricingEngine bs = new BlackScholesPricingEngine(inputData);
             double[] price = bs.price(inputData);
 
-            if (mInputData.mCarryRate - mInputData.mRiskFreeRate > 0 && mInputData.mRiskFreeRate > 0) {
+            if (mInputData.mCarryRate - mInputData.mRiskFreeRate >= 0 && mInputData.mRiskFreeRate > 0) {
                 ret[0] = price[0];
-                ret[1] = putPayoff[1];
+                ret[1] = putPayoff[0];
             }
             else {
-                ret[0] = price[0];
+                ret[0] = callPayoff[0];
                 ret[1] = price[1];
             }
         }

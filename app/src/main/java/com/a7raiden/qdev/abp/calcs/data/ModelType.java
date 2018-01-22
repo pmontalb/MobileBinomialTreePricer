@@ -8,7 +8,7 @@ public enum ModelType {
     Null,
     BlackScholes,
     CoxRubinsteinRoss,
-    JarrowRudd,
+    JarrowRuddNeutral,
     Tian,
     LeisenReimer,
     Joshi

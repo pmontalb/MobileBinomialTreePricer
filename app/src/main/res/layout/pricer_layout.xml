@@ -9,8 +9,13 @@
         android:id="@+id/input"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:clipToPadding="false"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toTopOf="@+id/output"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -207,7 +212,7 @@
                 <Spinner
                     android:id="@+id/modelSpinner"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="32dp"
                     android:layout_weight="1" />
 
 
@@ -259,7 +264,7 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/outputPutPriceTextView"
+                    android:id="@+id/outputAmericanCallPriceTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/border"
@@ -281,7 +286,7 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/outputCallPriceTextView"
+                    android:id="@+id/outputAmericanPutPriceTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/border"
@@ -319,7 +324,7 @@
                     android:textAppearance="@style/TextAppearance.AppCompat" />
 
                 <TextView
-                    android:id="@+id/outputPutDeltaLabelTextView"
+                    android:id="@+id/outputAmericanPutDeltaLabelTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/border"
@@ -330,7 +335,7 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/outputPutDeltaTextView"
+                    android:id="@+id/outputAmericanPutDeltaTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/border"

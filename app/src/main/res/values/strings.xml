@@ -16,19 +16,19 @@
     <string name="strike_default">100</string>
 
     <string name="risk_free_rate_label">Risk-Free Interest Rate (%):</string>
-    <string name="risk_free_rate_hint">Risk-free discounting rate</string>
+    <string name="risk_free_rate_hint">Risk-free Rate</string>
     <string name="risk_free_rate_default">-0.1</string>
 
     <string name="carry_rate_label">Carry Rate (%):</string>
-    <string name="carry_rate_hint">Cost of carrying the option underlying. If there is no borrow rate, use the same value as the risk-free interest rate</string>
+    <string name="carry_rate_hint">Carry Rate</string>
     <string name="carry_rate_default">-0.1</string>
 
     <string name="volatility_label">Volatility (%):</string>
-    <string name="volatility_hint">Volatility of the underlying security:</string>
+    <string name="volatility_hint">Volatility</string>
     <string name="volatility_default">30</string>
 
     <string name="expiry_label">Year Fraction:</string>
-    <string name="expiry_hint">Years from valuation date to option expiry</string>
+    <string name="expiry_hint">Years to expiry</string>
     <string name="expiry_default">1</string>
 
     <string name="model_type_label">Model Type:</string>
@@ -37,7 +37,7 @@
         <item>Cox-Rubinstein-Ross</item>
         <item>Jarrow-Rudd</item>
         <item>Tian</item>
-        <item>LeisenReimer</item>
+        <item>Leisen-Reimer</item>
         <item>Joshi</item>
     </string-array>
 

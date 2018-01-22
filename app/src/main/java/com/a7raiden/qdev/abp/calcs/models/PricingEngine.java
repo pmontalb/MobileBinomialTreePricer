@@ -24,7 +24,7 @@ public abstract class PricingEngine implements IPricingEngine {
                 return new BlackScholesPricingEngine(inputData);
             case CoxRubinsteinRoss:
                 return new CoxRubinsteinRossBinomialTree(inputData);
-            case JarrowRudd:
+            case JarrowRuddNeutral:
                 return new JarrowRuddBinomialTree(inputData);
             case Tian:
                 return new TianBinomialTree(inputData);
