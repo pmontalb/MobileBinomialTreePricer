@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -22,7 +21,6 @@ import com.a7raiden.qdev.abp.adapters.SectionsPagerAdapter;
 import com.a7raiden.qdev.abp.calcs.data.InputData;
 import com.a7raiden.qdev.abp.calcs.data.ModelType;
 import com.a7raiden.qdev.abp.calcs.data.OutputData;
-import com.a7raiden.qdev.abp.calcs.data.TreeInputData;
 import com.a7raiden.qdev.abp.calcs.interfaces.IPricingEngine;
 import com.a7raiden.qdev.abp.calcs.models.PricingEngine;
 
@@ -108,23 +106,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void runBinomialTree() {
-        String modelTypeString =((Spinner)findViewById(R.id.modelSpinner)).getSelectedItem().toString();
-        modelTypeString = modelTypeString
-                .replace("-", "")
-                .replace(" ", "");
-        ModelType modelType = ModelType.valueOf(modelTypeString);
         InputData inputData = getInputData();
 
         // TODO: read from settings
-        final int nodes = 80;
-        final boolean smoothing = true;
-        final boolean acceleration = true;
-        TreeInputData treeInputData = new TreeInputData(inputData, nodes, smoothing, acceleration);
-        IPricingEngine pe = PricingEngine.create(modelType, treeInputData);
-        OutputData[] americanOutputs = pe.compute();
+        inputData.mNodes = 80;
+        inputData.mSmoothing = true;
+        inputData.mAcceleration = true;
+        IPricingEngine pe = PricingEngine.create(inputData);
+        OutputData[] americanOutputs = pe.computeAnalytics();
 
-        IPricingEngine bs = PricingEngine.create(ModelType.BlackScholes, inputData);
-        OutputData[] europeanOutputs = bs.compute();
+        inputData.mModelType = ModelType.BlackScholes;
+        IPricingEngine bs = PricingEngine.create(inputData);
+        OutputData[] europeanOutputs = bs.computeAnalytics();
         populateOutputData(americanOutputs[0], americanOutputs[1], europeanOutputs[0], europeanOutputs[1]);
     }
 
@@ -143,6 +136,12 @@ public class MainActivity extends AppCompatActivity {
             values[i] = Double.parseDouble(editText.getText().toString());
         }
 
+        String modelTypeString =((Spinner)findViewById(R.id.modelSpinner)).getSelectedItem().toString();
+        modelTypeString = modelTypeString
+                .replace("-", "")
+                .replace(" ", "");
+        ModelType modelType = ModelType.valueOf(modelTypeString);
+
         return new InputData.Builder()
                 .spot(values[0])
                 .strike(values[1])
@@ -150,6 +149,7 @@ public class MainActivity extends AppCompatActivity {
                 .carryRate(values[3] * 0.01)
                 .volatility(values[4] * 0.01)
                 .expiry(values[5])
+                .modelType(modelType)
                 .build();
     }
 

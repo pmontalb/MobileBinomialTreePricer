@@ -1,6 +1,7 @@
 package com.a7raiden.qdev.abp.calcs.math;
 
-import com.a7raiden.qdev.abp.calcs.data.RootFinderData;
+import com.a7raiden.qdev.abp.calcs.data.RootFinderInputData;
+import com.a7raiden.qdev.abp.calcs.data.RootFinderOutputData;
 
 import java.util.function.Function;
 
@@ -17,12 +18,14 @@ public class BrentRootFinder extends RootFinder {
     /**
      * http://people.sc.fsu.edu/~jburkardt/cpp_src/brent/brent.html
      *
-     * @param maxIterations
-     * @param absTolerance
      * @return
      */
     @Override
-    public RootFinderData solve(double a, double b, int maxIterations, double absTolerance) {
+    public RootFinderOutputData solve(RootFinderInputData rootFinderInputData) {
+        double a = rootFinderInputData.mLowerPoint;
+        double b = rootFinderInputData.mUpperPoint;
+        int maxIterations = rootFinderInputData.mMaxIterations;
+
         double c;
         double d = 0.0;
         double e;
@@ -64,7 +67,7 @@ public class BrentRootFinder extends RootFinder {
             ++n;
 
             m = 0.5 * ( sa + sb ) ;
-            tol = _eps * Math.abs ( x ) + absTolerance;
+            tol = _eps * Math.abs ( x ) + rootFinderInputData.mAbsTolerance;
             t2 = 2.0 * tol;
 //
 //  Check the stopping criterion.
@@ -197,6 +200,6 @@ public class BrentRootFinder extends RootFinder {
             }
         }
 
-        return new RootFinderData(x, n, n == maxIterations);
+        return new RootFinderOutputData(x, n, n == maxIterations);
     }
 }

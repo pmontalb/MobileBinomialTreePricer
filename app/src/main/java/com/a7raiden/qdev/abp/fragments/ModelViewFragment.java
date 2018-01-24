@@ -46,17 +46,26 @@ public class ModelViewFragment extends Fragment {
         }
     }
 
+    private void createDropdownValuesFromArrayOnSpinner(View view, int spinnerId, int arrayId ) {
+        Spinner spinner = view.findViewById(spinnerId);
+        if (spinner == null)
+            return;  // this means this is not the right view!
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
+                view.getContext(), arrayId, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        spinner.setAdapter(adapter);
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         int resourceId = getResourceIdFromIdentifier(getArguments().getInt(IDENTIFIER));
 
         View view = inflater.inflate(resourceId, container, false);
-        Spinner spinner = view.findViewById(R.id.modelSpinner);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(view.getContext(),
-                R.array.models_array, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
+
+        createDropdownValuesFromArrayOnSpinner(view, R.id.modelSpinner, R.array.models_array);
+        createDropdownValuesFromArrayOnSpinner(view, R.id.optimizerSpinner, R.array.optimizer_array);
 
         return view;
     }

@@ -2,8 +2,8 @@
 // https://gist.github.com/jtravs/5327056
 
 package com.a7raiden.qdev.abp.calcs.math;
-import com.a7raiden.qdev.abp.calcs.data.RootFinderData;
-import com.a7raiden.qdev.abp.calcs.interfaces.IRootFinder;
+import com.a7raiden.qdev.abp.calcs.data.RootFinderInputData;
+import com.a7raiden.qdev.abp.calcs.data.RootFinderOutputData;
 
 import java.util.function.Function;
 
@@ -31,32 +31,28 @@ public class Toms348RootFinder extends RootFinder {
      * NOTE: the code here was derived directly from the algorithms described in the
      * above paper, no ACM copyrighted code was used. Some implementation tips (but
      * no codes) were obtained by reading the Boost C++ sources in math/tools.
-     * @param lowerPoint left bracket estimation
-     * @param upperPoint right bracket estimation
-     * @param maxIterations maximum number of iterations
-     * @param tolerance stopping criteria
      * @return
      */
     @Override
-    public RootFinderData solve(double lowerPoint, double upperPoint, int maxIterations, double tolerance) {
+    public RootFinderOutputData solve(RootFinderInputData rootFinderInputData) {
         Function<Double, Double> f = mObjectiveFunction;  // just for readability
         double lambda = .7;
         double mu = .5;
 
-        double a = lowerPoint;
-        double b = upperPoint;
+        double a = rootFinderInputData.mLowerPoint;
+        double b = rootFinderInputData.mUpperPoint;
 
         // TODO accept a scalar guess and try to construct our own bracket
         if (a >= b || f.apply(a) * f.apply(b) >= 0)
-            return new RootFinderData(-1, -1, false);
+            return new RootFinderOutputData(-1, -1, false);
 
         // start with a secant approximation
         double c = secant(a, b);
         double d;
         // re-bracket and check termination
-        BracketData bracketData = bracket(a, b, c, tolerance, lambda);
+        BracketData bracketData = bracket(a, b, c, rootFinderInputData.mAbsTolerance, lambda);
         if (bracketData.mRootIsFound)
-            return new RootFinderData(bracketData.mBracketInfo[0], 1, true) ;
+            return new RootFinderOutputData(bracketData.mBracketInfo[0], 1, true) ;
         else {
             a = bracketData.mBracketInfo[0];
             b = bracketData.mBracketInfo[1];
@@ -64,7 +60,7 @@ public class Toms348RootFinder extends RootFinder {
         }
 
         double e = 0.0, aStar, bStar, cStar, dStar, ah, bh, ch, dh;
-        for (int n = 2; n < maxIterations; ++n){
+        for (int n = 2; n < rootFinderInputData.mMaxIterations; ++n){
             // use either a cubic (if possible) or quadratic interpolation
             if (n > 2 && areDistinct(a, b, d, e))
                 c = inverseCubicInterpolationRoot(a, b, d, e);
@@ -72,9 +68,9 @@ public class Toms348RootFinder extends RootFinder {
                 c = newtonQuadratic(a, b, d, 2);
 
             // re-bracket and check termination
-            BracketData newBracketData = bracket(a, b, c, tolerance, lambda);
+            BracketData newBracketData = bracket(a, b, c, rootFinderInputData.mAbsTolerance, lambda);
             if (newBracketData.mRootIsFound)
-                return new RootFinderData(newBracketData.mBracketInfo[0], 1, true);
+                return new RootFinderOutputData(newBracketData.mBracketInfo[0], n, true);
             else {
                 aStar = newBracketData.mBracketInfo[0];
                 bStar = newBracketData.mBracketInfo[1];
@@ -88,9 +84,9 @@ public class Toms348RootFinder extends RootFinder {
                 cStar = newtonQuadratic(aStar, bStar, dStar, 3);
 
             // re-bracket and check termination
-            BracketData newerBracketData = bracket(aStar, bStar, cStar, tolerance, lambda);
+            BracketData newerBracketData = bracket(aStar, bStar, cStar, rootFinderInputData.mAbsTolerance, lambda);
             if (newerBracketData.mRootIsFound)
-                return new RootFinderData(newerBracketData.mBracketInfo[0], 1, true);
+                return new RootFinderOutputData(newerBracketData.mBracketInfo[0], n, true);
             else {
                 aStar = newerBracketData.mBracketInfo[0];
                 bStar = newerBracketData.mBracketInfo[1];
@@ -104,9 +100,9 @@ public class Toms348RootFinder extends RootFinder {
             ch = Math.abs(cStar - u) > (bStar - aStar) / 2 ? aStar + (bStar - aStar) / 2 : cStar;
 
             // re-bracket and check termination
-            BracketData newestBracketData = bracket(aStar, bStar, ch, tolerance, lambda);
+            BracketData newestBracketData = bracket(aStar, bStar, ch, rootFinderInputData.mAbsTolerance, lambda);
             if (newestBracketData.mRootIsFound)
-                return new RootFinderData(newestBracketData.mBracketInfo[0], 1, true);
+                return new RootFinderOutputData(newestBracketData.mBracketInfo[0], 1, true);
             else {
                 ah = newestBracketData.mBracketInfo[0];
                 bh = newestBracketData.mBracketInfo[1];
@@ -123,9 +119,9 @@ public class Toms348RootFinder extends RootFinder {
             else {
                 e = dh;
 
-                BracketData lastBracketData = bracket(ah, bh, ah + (bh - ah) / 2, tolerance, lambda);
+                BracketData lastBracketData = bracket(ah, bh, ah + (bh - ah) / 2, rootFinderInputData.mAbsTolerance, lambda);
                 if (lastBracketData.mRootIsFound)
-                    return new RootFinderData(lastBracketData.mBracketInfo[0], 1, true);
+                    return new RootFinderOutputData(lastBracketData.mBracketInfo[0], 1, true);
                 else {
                     a = lastBracketData.mBracketInfo[0];
                     b = lastBracketData.mBracketInfo[1];
@@ -134,7 +130,7 @@ public class Toms348RootFinder extends RootFinder {
             }
         }
 
-        return new RootFinderData(-1, maxIterations, false);
+        return new RootFinderOutputData(-1, rootFinderInputData.mMaxIterations, false);
     }
 
     /**

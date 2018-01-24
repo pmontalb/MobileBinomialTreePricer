@@ -1,24 +1,17 @@
 package com.a7raiden.qdev.abp.calcs.models;
 
-import android.drm.DrmStore;
-import android.os.Build;
-import android.support.annotation.RequiresApi;
-import android.support.annotation.VisibleForTesting;
-
 import com.a7raiden.qdev.abp.calcs.data.CachedData;
 import com.a7raiden.qdev.abp.calcs.data.InputData;
 import com.a7raiden.qdev.abp.calcs.data.ModelType;
-import com.a7raiden.qdev.abp.calcs.data.TreeInputData;
 
 import java.security.InvalidParameterException;
-import java.util.function.BiFunction;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Created by 7Raiden on 21/01/2018.
  */
 
 public abstract class BinomialTreePricingEngine extends PricingEngine {
-    TreeInputData mInputData;
     CachedData mCachedData;
 
     /**
@@ -66,22 +59,15 @@ public abstract class BinomialTreePricingEngine extends PricingEngine {
                 Math.exp((inputData.mCarryRate - inputData.mRiskFreeRate) * mDt));
 
         buildImpl(inputData);
+
+        if (mU < 1 || mD > 1 || mP < 0 || mQ < 0)
+            throw new InvalidParameterException();
     }
 
     // Reference paper:
     //      THE CONVERGENCE OF BINOMIAL TREES FOR PRICING THE AMERICAN PUT
     //      http://fbe.unimelb.edu.au/__data/assets/pdf_file/0010/2591884/170.pdf
     protected abstract void buildImpl(InputData inputData);
-
-    @Override
-    protected InputData getInputData() {
-        return mInputData;
-    }
-
-    @Override
-    protected void setInputData(InputData inputData) {
-        mInputData = (TreeInputData)inputData;
-    }
 
     @Override
     public double[] price(InputData inputData) {

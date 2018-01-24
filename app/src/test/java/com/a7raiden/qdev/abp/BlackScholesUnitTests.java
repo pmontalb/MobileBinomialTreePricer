@@ -20,9 +20,11 @@ public class BlackScholesUnitTests {
                 .riskFreeRate(0.05)
                 .carryRate(.02)
                 .volatility(.30)
-                .expiry(2.0).build();
-        IPricingEngine pe = PricingEngine.create(ModelType.BlackScholes, inputData);
-        OutputData[] outputData = pe.compute();
+                .expiry(2.0)
+                .modelType(ModelType.BlackScholes)
+                .build();
+        IPricingEngine pe = PricingEngine.create(inputData);
+        OutputData[] outputData = pe.computeAnalytics();
 
         assertEquals(17.425286472661877, outputData[0].mPrice, 1e-12);
         assertEquals(0.5842281508560783, outputData[0].mDelta, 1e-12);

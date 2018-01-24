@@ -1,6 +1,7 @@
 package com.a7raiden.qdev.abp.calcs.math;
 
-import com.a7raiden.qdev.abp.calcs.data.RootFinderData;
+import com.a7raiden.qdev.abp.calcs.data.RootFinderInputData;
+import com.a7raiden.qdev.abp.calcs.data.RootFinderOutputData;
 
 import java.util.function.Function;
 
@@ -14,25 +15,26 @@ public class BisectionRootFinder extends RootFinder {
     }
 
     @Override
-    public RootFinderData solve(double lowerPoint, double upperPoint, int maxIterations, double absTolerance) {
-        if(mObjectiveFunction.apply(lowerPoint) * mObjectiveFunction.apply(upperPoint) >= 0)
-            return new RootFinderData(-1, -1, false);
+    public RootFinderOutputData solve(RootFinderInputData rootFinderInputData) {
+        if(mObjectiveFunction.apply(rootFinderInputData.mLowerPoint) * mObjectiveFunction.apply(rootFinderInputData.mUpperPoint) >= 0)
+            return new RootFinderOutputData(-1, -1, false);
 
         int iterations = 0;
-        while ((upperPoint - lowerPoint) >= absTolerance)
+        while ((rootFinderInputData.mUpperPoint - rootFinderInputData.mLowerPoint) >= rootFinderInputData.mAbsTolerance)
         {
             ++iterations;
 
-            double midPoint = .5 * (lowerPoint + upperPoint);
-            if (Math.abs(mObjectiveFunction.apply(midPoint)) <= absTolerance)
-                return new RootFinderData(midPoint, iterations, true);
+            double midPoint = .5 * (rootFinderInputData.mLowerPoint + rootFinderInputData.mUpperPoint);
+            if (Math.abs(mObjectiveFunction.apply(midPoint)) <= rootFinderInputData.mAbsTolerance)
+                return new RootFinderOutputData(midPoint, iterations, true);
 
-            else if (mObjectiveFunction.apply(midPoint)*mObjectiveFunction.apply(lowerPoint) < 0)
-                upperPoint = midPoint;
+            else if (mObjectiveFunction.apply(midPoint)*mObjectiveFunction.apply(rootFinderInputData.mLowerPoint) < 0)
+                rootFinderInputData.mUpperPoint = midPoint;
             else
-                lowerPoint = midPoint;
+                rootFinderInputData.mLowerPoint = midPoint;
         }
 
-        return new RootFinderData(-1, maxIterations, false);
+        return new RootFinderOutputData(.5 * (rootFinderInputData.mUpperPoint + rootFinderInputData.mLowerPoint),
+                iterations, iterations <= rootFinderInputData.mMaxIterations);
     }
 }

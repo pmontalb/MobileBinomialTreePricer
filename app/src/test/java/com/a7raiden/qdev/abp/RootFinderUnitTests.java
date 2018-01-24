@@ -1,5 +1,6 @@
 package com.a7raiden.qdev.abp;
-import com.a7raiden.qdev.abp.calcs.data.RootFinderData;
+import com.a7raiden.qdev.abp.calcs.data.RootFinderInputData;
+import com.a7raiden.qdev.abp.calcs.data.RootFinderOutputData;
 import com.a7raiden.qdev.abp.calcs.data.RootFinderType;
 import com.a7raiden.qdev.abp.calcs.interfaces.IRootFinder;
 import com.a7raiden.qdev.abp.calcs.math.RootFinder;
@@ -20,9 +21,15 @@ public class RootFinderUnitTests {
             Function<Double, Double> obj = x -> Math.sin(x) - .5 * x;
             IRootFinder rootFinder = RootFinder.create(rootFinderType, obj);
 
-            RootFinderData rootFinderData = rootFinder.solve(.5 * Math.PI, Math.PI, 100, 1e-8);
-            assertEquals(true, rootFinderData.mHasConverged);
-            assertEquals(1.89549426703398094714, rootFinderData.mRoot, 1e-8);
+            RootFinderInputData rootFinderInputData = new RootFinderInputData.Builder()
+                    .lowerPoint(.5 * Math.PI)
+                    .upperPoint(Math.PI)
+                    .maxIterations(100)
+                    .absTolerance(1e-8)
+                    .build();
+            RootFinderOutputData rootFinderOutputData = rootFinder.solve(rootFinderInputData);
+            assertEquals(true, rootFinderOutputData.mHasConverged);
+            assertEquals(1.89549426703398094714, rootFinderOutputData.mRoot, 1e-8);
         }
     }
 
@@ -37,12 +44,24 @@ public class RootFinderUnitTests {
         };
         IRootFinder rootFinder = RootFinder.create(RootFinderType.Tom348, obj);
 
-        RootFinderData rootFinderData = rootFinder.solve(1 + 1e-9, 4 - 1e-9, 100, 1e-8);
-        assertEquals(true, rootFinderData.mHasConverged);
-        assertEquals(3.0229153472730568, rootFinderData.mRoot, 1e-5);
+        RootFinderInputData rootFinderInputData = new RootFinderInputData.Builder()
+                .lowerPoint(1 + 1e-9)
+                .upperPoint(4 - 1e-9)
+                .maxIterations(100)
+                .absTolerance(0)
+                .build();
+        RootFinderOutputData rootFinderOutputData = rootFinder.solve(rootFinderInputData);
+        assertEquals(true, rootFinderOutputData.mHasConverged);
+        assertEquals(3.0229153472730568, rootFinderOutputData.mRoot, 1e-5);
 
-        RootFinderData rootFinderData2 = rootFinder.solve(100 + 1e-9, 121 - 1e-9, 100, 1e-8);
-        assertEquals(true, rootFinderData2.mHasConverged);
-        assertEquals(110.02653274766949, rootFinderData2.mRoot, 1e-3);
+        rootFinderInputData = new RootFinderInputData.Builder()
+                .lowerPoint(100 + 1e-9)
+                .upperPoint(121 - 1e-9)
+                .maxIterations(100)
+                .absTolerance(0)
+                .build();
+        RootFinderOutputData rootFinderOutputData2 = rootFinder.solve(rootFinderInputData);
+        assertEquals(true, rootFinderOutputData2.mHasConverged);
+        assertEquals(110.02653274766949, rootFinderOutputData2.mRoot, 1e-3);
     }
 }

@@ -1,50 +1,66 @@
 package com.a7raiden.qdev.abp.calcs.models;
 
+import com.a7raiden.qdev.abp.calcs.data.ImpliedVolatilityInputData;
 import com.a7raiden.qdev.abp.calcs.data.InputData;
 import com.a7raiden.qdev.abp.calcs.data.ModelType;
+import com.a7raiden.qdev.abp.calcs.data.OptionType;
 import com.a7raiden.qdev.abp.calcs.data.OutputData;
+import com.a7raiden.qdev.abp.calcs.data.RootFinderOutputData;
 import com.a7raiden.qdev.abp.calcs.interfaces.IPricingEngine;
+import com.a7raiden.qdev.abp.calcs.interfaces.IRootFinder;
+import com.a7raiden.qdev.abp.calcs.math.RootFinder;
+
+import java.security.InvalidParameterException;
 
 /**
  * Created by 7Raiden on 19/01/2018.
  */
 
 public abstract class PricingEngine implements IPricingEngine {
+    protected InputData mInputData;
 
     PricingEngine(InputData inputData) {
-        setInputData(inputData);
+        mInputData = inputData;
     }
 
-    protected abstract InputData getInputData();
-    protected abstract void setInputData(InputData inputData);
+    public static PricingEngine create(InputData inputData) {
+        if (inputData.mModelType == ModelType.BlackScholes)
+            return new BlackScholesPricingEngine(inputData);
 
-    public static PricingEngine create(ModelType modelType, InputData inputData) {
-        switch (modelType) {
-            case BlackScholes:
-                return new BlackScholesPricingEngine(inputData);
+        BinomialTreePricingEngine pe;
+        switch (inputData.mModelType) {
             case CoxRubinsteinRoss:
-                return new CoxRubinsteinRossBinomialTree(inputData);
+                pe = new CoxRubinsteinRossBinomialTree(inputData);
+                break;
             case JarrowRuddNeutral:
-                return new JarrowRuddBinomialTree(inputData);
+                pe = new JarrowRuddBinomialTree(inputData);
+                break;
             case Tian:
-                return new TianBinomialTree(inputData);
+                pe = new TianBinomialTree(inputData);
+                break;
             case LeisenReimer:
-                return new LeisenReimerBinomialTree(inputData);
+                pe = new LeisenReimerBinomialTree(inputData);
+                break;
             case Joshi:
-                return new JoshiBinomialTree(inputData);
+                pe = new JoshiBinomialTree(inputData);
+                break;
             default:
-                throw new IllegalArgumentException();
+                throw new InvalidParameterException();
         }
+
+        pe.build(inputData);
+
+        return pe;
     }
 
     @Override
-    public OutputData[] compute() {
+    public OutputData[] computeAnalytics() {
         OutputData[] ret = new OutputData[2];
         for (int i = 0; i < ret.length; ++i) {
             ret[i] = new OutputData.Builder().build();
         }
 
-        double[] price = price(getInputData());
+        double[] price = price(mInputData);
         ret[0].mPrice = price[0];
         ret[1].mPrice = price[1];
 
@@ -55,10 +71,30 @@ public abstract class PricingEngine implements IPricingEngine {
         return ret;
     }
 
+    static public RootFinderOutputData computeImpliedVolatility(ImpliedVolatilityInputData impliedVolatilityInputData) {
+        RootFinderOutputData[] ret = new RootFinderOutputData[2];
+        for (int i = 0; i < ret.length; ++i) {
+            ret[i] = new RootFinderOutputData(0.0, -1, false);
+        }
+
+        int outputIdx = impliedVolatilityInputData.mOptionType == OptionType.Call ? 0 : 1;
+
+        IRootFinder rootFinder = RootFinder.create(
+                impliedVolatilityInputData.mRootFinderInputData.mRootFinderType,
+                sigma -> {
+                        InputData inputData = new InputData(impliedVolatilityInputData.mInputData);
+                        inputData.mVolatility = sigma;
+                        PricingEngine pe = PricingEngine.create(inputData);
+                        return pe.price(inputData)[outputIdx] - impliedVolatilityInputData.mTargetPrice;
+                });
+
+        return rootFinder.solve(impliedVolatilityInputData.mRootFinderInputData);
+    }
+
     public abstract double[] price(InputData inputData);
 
     public void spatialDerivatives(OutputData callOutputData, OutputData putOutputData) {
-        InputData temp = new InputData(getInputData());
+        InputData temp = new InputData(mInputData);
         double spotIncrement = 1e-4;
 
         temp.mSpot += spotIncrement;
@@ -75,7 +111,7 @@ public abstract class PricingEngine implements IPricingEngine {
     }
 
     public void vega(OutputData callOutputData, OutputData putOutputData) {
-        InputData temp = new InputData(getInputData());
+        InputData temp = new InputData(mInputData);
         double vegaIncrement = 1e-4;
 
         temp.mVolatility += vegaIncrement;

@@ -35,10 +35,18 @@
     <string name="model_type_hint">Model Type</string>
     <string-array name="models_array">
         <item>Cox-Rubinstein-Ross</item>
-        <item>Jarrow-Rudd</item>
+        <item>Jarrow-Rudd Neutral</item>
         <item>Tian</item>
         <item>Leisen-Reimer</item>
         <item>Joshi</item>
+    </string-array>
+
+    <string name="optimizer_label">Optimizer:</string>
+    <string name="optimizer_hint">Optimizer</string>
+    <string-array name="optimizer_array">
+        <item>Bisection</item>
+        <item>Brent</item>
+        <item>Toms 348</item>
     </string-array>
 
     <string name="option_price_label">Option Price:</string>

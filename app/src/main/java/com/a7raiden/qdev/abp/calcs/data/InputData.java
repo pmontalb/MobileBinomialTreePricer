@@ -40,6 +40,23 @@ public class InputData {
      */
     public ModelType mModelType;
 
+    // ================================ Tree Data=================================
+    /**
+     * Number of nodes in the tree
+     */
+    public int mNodes;
+
+    /**
+     * Payoff smoothing: if true, the last Backward Induction step will be smoothed with Black-Scholes
+     */
+    public boolean mSmoothing;
+
+    /**
+     * Acceleration: if true, it tries (depending on interest rates) to smooth the payoff as much as possible
+     */
+    public boolean mAcceleration;
+    // ============================================================================
+
     public InputData(Builder builder) {
         this.mSpot = builder.mSpot;
         this.mStrike = builder.mStrike;
@@ -48,6 +65,9 @@ public class InputData {
         this.mExpiry = builder.mExpiry;
         this.mVolatility = builder.mVolatility;
         this.mModelType = builder.mModelType;
+        this.mNodes = builder.mNodes;
+        this.mSmoothing = builder.mSmoothing;
+        this.mAcceleration = builder.mAcceleration;
     }
 
     public InputData(InputData rhs) {
@@ -58,6 +78,9 @@ public class InputData {
         this.mExpiry = rhs.mExpiry;
         this.mVolatility = rhs.mVolatility;
         this.mModelType = rhs.mModelType;
+        this.mNodes = rhs.mNodes;
+        this.mSmoothing = rhs.mSmoothing;
+        this.mAcceleration = rhs.mAcceleration;
     }
 
     public static class Builder {
@@ -68,6 +91,9 @@ public class InputData {
         private double mExpiry = 0.0;
         private double mVolatility = 0.0;
         private ModelType mModelType = ModelType.Null;
+        private int mNodes = 0;
+        private boolean mSmoothing = false;
+        private boolean mAcceleration = false;
 
         public Builder spot(double spot) {
             this.mSpot = spot;
@@ -95,6 +121,18 @@ public class InputData {
         }
         public Builder modelType(ModelType modelType) {
             this.mModelType = modelType;
+            return this;
+        }
+        public Builder nodes(int nodes) {
+            this.mNodes = nodes;
+            return this;
+        }
+        public Builder smoothing(boolean smoothing) {
+            this.mSmoothing = smoothing;
+            return this;
+        }
+        public Builder acceleration(boolean acceleration) {
+            this.mAcceleration = acceleration;
             return this;
         }
 

@@ -11,8 +11,6 @@ import static java.lang.Math.sqrt;
  */
 
 public final class BlackScholesPricingEngine extends PricingEngine {
-    private InputData mInputData;
-
     /**
      * normCdf(d1)
      */
