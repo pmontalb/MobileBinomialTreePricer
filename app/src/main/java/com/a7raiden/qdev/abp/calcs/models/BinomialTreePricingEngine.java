@@ -46,6 +46,9 @@ public abstract class BinomialTreePricingEngine extends PricingEngine {
     }
 
     public void build(InputData inputData) {
+        int minNodes = (int)(mInputData.mCarryRate * mInputData.mCarryRate * mInputData.mExpiry / (mInputData.mVolatility * mInputData.mVolatility));
+        mInputData.mNodes = Math.max(minNodes, mInputData.mNodes);
+
         if (inputData.mModelType == ModelType.LeisenReimer ||
                 inputData.mModelType == ModelType.Joshi)
             mInputData.mNodes = (mInputData.mNodes % 2 != 0) ? mInputData.mNodes : mInputData.mNodes + 1;
@@ -59,9 +62,6 @@ public abstract class BinomialTreePricingEngine extends PricingEngine {
                 Math.exp((inputData.mCarryRate - inputData.mRiskFreeRate) * mDt));
 
         buildImpl(inputData);
-
-        if (mU < 1 || mD > 1 || mP < 0 || mQ < 0)
-            throw new InvalidParameterException();
     }
 
     // Reference paper:
@@ -106,8 +106,6 @@ public abstract class BinomialTreePricingEngine extends PricingEngine {
             updateGrid(_grid, inputData.mSpot, n);
             for (int i = 0; i < n; ++i) {
                 callPayoff[i] = Math.max(_grid[i] - inputData.mStrike, discountedExpectation(callPayoff, i));
-                if (callPayoff[i] < -1e-10)
-                    throw new InvalidParameterException(Double.toString(callPayoff[i]));
                 putPayoff[i] = Math.max(-_grid[i] + inputData.mStrike, discountedExpectation(putPayoff, i));
             }
         }

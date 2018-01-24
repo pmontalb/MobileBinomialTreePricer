@@ -8,5 +8,5 @@ public enum RootFinderType {
     Null,
     Bisection,
     Brent,
-    Tom348
+    Toms348
 }

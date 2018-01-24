@@ -25,7 +25,7 @@ public abstract class RootFinder implements IRootFinder {
                 return new BisectionRootFinder(objectiveFunction);
             case Brent:
                 return new BrentRootFinder(objectiveFunction);
-            case Tom348:
+            case Toms348:
                 return new Toms348RootFinder(objectiveFunction);
             default:
                 throw new InvalidParameterException();

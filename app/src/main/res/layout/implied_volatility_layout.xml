@@ -369,7 +369,7 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/outputIterationTextView"
+                    android:id="@+id/outputAmericanIterationTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/border"

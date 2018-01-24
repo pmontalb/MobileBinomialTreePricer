@@ -42,7 +42,7 @@ public class RootFinderUnitTests {
 
             return ret;
         };
-        IRootFinder rootFinder = RootFinder.create(RootFinderType.Tom348, obj);
+        IRootFinder rootFinder = RootFinder.create(RootFinderType.Toms348, obj);
 
         RootFinderInputData rootFinderInputData = new RootFinderInputData.Builder()
                 .lowerPoint(1 + 1e-9)

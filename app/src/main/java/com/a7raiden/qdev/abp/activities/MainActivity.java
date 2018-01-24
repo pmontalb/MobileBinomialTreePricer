@@ -1,5 +1,6 @@
 package com.a7raiden.qdev.abp.activities;
 
+import android.graphics.Path;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -12,15 +13,21 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.a7raiden.qdev.abp.R;
 
 import com.a7raiden.qdev.abp.adapters.SectionsPagerAdapter;
+import com.a7raiden.qdev.abp.calcs.data.ImpliedVolatilityInputData;
 import com.a7raiden.qdev.abp.calcs.data.InputData;
 import com.a7raiden.qdev.abp.calcs.data.ModelType;
+import com.a7raiden.qdev.abp.calcs.data.OptionType;
 import com.a7raiden.qdev.abp.calcs.data.OutputData;
+import com.a7raiden.qdev.abp.calcs.data.RootFinderInputData;
+import com.a7raiden.qdev.abp.calcs.data.RootFinderOutputData;
+import com.a7raiden.qdev.abp.calcs.data.RootFinderType;
 import com.a7raiden.qdev.abp.calcs.interfaces.IPricingEngine;
 import com.a7raiden.qdev.abp.calcs.models.PricingEngine;
 
@@ -106,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void runBinomialTree() {
-        InputData inputData = getInputData();
+        InputData inputData = getInputData(false);
 
         // TODO: read from settings
         inputData.mNodes = 80;
@@ -122,15 +129,70 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void runImpliedVolatility() {
+        InputData inputData = getInputData(false);
+        // TODO: read from settings
+        inputData.mNodes = 80;
+        inputData.mSmoothing = true;
+        inputData.mAcceleration = true;
+
+        String rootFinderTypeString =((Spinner)findViewById(R.id.optimizerSpinner)).getSelectedItem().toString();
+        rootFinderTypeString = rootFinderTypeString
+                .replace("-", "")
+                .replace(" ", "");
+        RootFinderType rootFinderType = RootFinderType.valueOf(rootFinderTypeString);
+
+        EditText editText = findViewById(R.id.toleranceEditText);
+        double tolerance = Double.parseDouble(editText.getText().toString());
+
+        editText = findViewById(R.id.optionPriceEditText);
+        double price = Double.parseDouble(editText.getText().toString());
+
+        RadioButton rb = findViewById(R.id.callRadioButton);
+        OptionType optionType = rb.isChecked() ? OptionType.Call : OptionType.Put;
+
+        RootFinderInputData rootFinderInputData = new RootFinderInputData.Builder()
+                .rootFinderType(rootFinderType)
+                .lowerPoint(1e-4)
+                .upperPoint(2.0)
+                .absTolerance(tolerance)
+                .maxIterations(200)  // TODO: make it dynamic maybe?
+                .build();
+        ImpliedVolatilityInputData impliedVolatilityInputData = new ImpliedVolatilityInputData
+                .Builder()
+                .targetPrice(price)
+                .inputData(inputData)
+                .optionType(optionType)
+                .rootFinderInputData(rootFinderInputData)
+                .build();
+        RootFinderOutputData americanOutputData = PricingEngine.computeImpliedVolatility(impliedVolatilityInputData);
+
+        inputData.mModelType = ModelType.BlackScholes;
+        rootFinderInputData = new RootFinderInputData.Builder()
+                .rootFinderType(rootFinderType)
+                .lowerPoint(1e-4)
+                .upperPoint(2.0)
+                .absTolerance(tolerance)
+                .maxIterations(200)  // TODO: make it dynamic maybe?
+                .build();
+        impliedVolatilityInputData = new ImpliedVolatilityInputData
+                .Builder()
+                .targetPrice(price)
+                .inputData(inputData)
+                .optionType(optionType)
+                .rootFinderInputData(rootFinderInputData)
+                .build();
+        RootFinderOutputData europeanOutputData = PricingEngine.computeImpliedVolatility(impliedVolatilityInputData);
+
+        populateOutputData(americanOutputData, europeanOutputData);
 
     }
 
-    private InputData getInputData() {
+    private InputData getInputData(boolean isImpliedVolView) {
         String[] names = { "spot", "strike", "riskFreeRate", "carryRate", "volatility", "expiry" };
         double[] values = new double[names.length];
         for (int i = 0; i < names.length; ++i) {
             EditText editText = findViewById(getResources().getIdentifier(
-                    names[i] + "EditText",
+                    names[i] + "EditText" + (isImpliedVolView ? "Iv" : ""),
                     "id",
                     this.getApplicationContext().getPackageName()));
             values[i] = Double.parseDouble(editText.getText().toString());
@@ -196,5 +258,17 @@ public class MainActivity extends AppCompatActivity {
         europeanCallVega.setText(new DecimalFormat("#0.0000").format(europeanCallData.mVega));
         TextView europeanPutVega = findViewById(R.id.outputEuropeanPutVegaTextView);
         europeanPutVega.setText(new DecimalFormat("#0.0000").format(europeanPutData.mVega));
+    }
+
+    private void populateOutputData(RootFinderOutputData americanData, RootFinderOutputData europeanData) {
+        TextView americanIv = findViewById(R.id.outputAmericanImpliedVolatilityTextView);
+        americanIv.setText(new DecimalFormat("#0.0000").format(americanData.mRoot));
+        TextView europeanIv = findViewById(R.id.outputEuropeanImpliedVolatilityTextView);
+        europeanIv.setText(new DecimalFormat("#0.0000").format(europeanData.mRoot));
+
+        TextView americanIter = findViewById(R.id.outputAmericanIterationTextView);
+        americanIter.setText(new DecimalFormat("#0").format(americanData.mIterations));
+        TextView europeanIter = findViewById(R.id.outputEuropeanIterationTextView);
+        europeanIter.setText(new DecimalFormat("#0").format(europeanData.mIterations));
     }
 }
