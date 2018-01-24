@@ -1,6 +1,8 @@
 package com.a7raiden.qdev.abp.activities;
 
-import android.graphics.Path;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -32,6 +34,7 @@ import com.a7raiden.qdev.abp.calcs.interfaces.IPricingEngine;
 import com.a7raiden.qdev.abp.calcs.models.PricingEngine;
 
 import java.text.DecimalFormat;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -105,7 +108,8 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_nodes) {
+            startActivity(new Intent(this, SettingsActivity.class));
             return true;
         }
 
@@ -129,7 +133,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void runImpliedVolatility() {
-        InputData inputData = getInputData(false);
+        InputData inputData = getInputData(true);
         // TODO: read from settings
         inputData.mNodes = 80;
         inputData.mSmoothing = true;
@@ -195,6 +199,8 @@ public class MainActivity extends AppCompatActivity {
                     names[i] + "EditText" + (isImpliedVolView ? "Iv" : ""),
                     "id",
                     this.getApplicationContext().getPackageName()));
+            if (editText == null)
+                continue; // means that current view is not interested in this item
             values[i] = Double.parseDouble(editText.getText().toString());
         }
 

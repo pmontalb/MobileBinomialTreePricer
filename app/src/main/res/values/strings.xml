@@ -61,7 +61,7 @@
     <string name="tolerance_default">0.00000001</string>
 
     <string name="output_default">000.0000</string>
-    
+
     <string name="call_price_label">Call Price:</string>
     <string name="call_price_hint">Call Price</string>
 
@@ -96,7 +96,24 @@
     <string name="european_options_label">European Exercise</string>
 
     <string name="run_label">Run</string>
-    
-    
+
     <string name="action_settings">Settings</string>
+    <string name="title_activity_settings">Settings</string>
+
+    <string name="smoothing_label">Smoothing</string>
+    <string name="smoothing_description">
+        If enabled, last step of binomial tree will be converted to a Black-Scholes step
+    </string>
+
+    <string name="acceleration_label">Acceleration</string>
+    <string name="acceleration_description">
+        If enabled, non-exercisable options will be calculated with Black-Scholes
+    </string>
+
+    <string name="nodes_label">Nodes</string>
+    <string name="nodes_description">
+        Number of grid points to use for Binomial Tree
+    </string>
+    <string name="nodes_default">120</string>
+
 </resources>
