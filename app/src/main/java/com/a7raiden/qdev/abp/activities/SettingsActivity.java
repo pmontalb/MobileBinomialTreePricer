@@ -44,8 +44,21 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         @Override
         public boolean onPreferenceChange(Preference preference, Object value) {
             String stringValue = value.toString();
-            preference.setSummary(stringValue);
 
+            if (preference instanceof ListPreference) {
+                // For list preferences, look up the correct display value in
+                // the preference's 'entries' list.
+                ListPreference listPreference = (ListPreference) preference;
+                int index = listPreference.findIndexOfValue(stringValue);
+
+                // Set the summary to reflect the new value.
+                preference.setSummary(index >= 0 ? listPreference.getEntries()[index] : null);
+
+            } else {
+                // For all other preferences, set the summary to the value's
+                // simple string representation.
+                preference.setSummary(stringValue);
+            }
             return true;
         }
     };
@@ -130,6 +143,21 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             setHasOptionsMenu(false);
 
             bindPreferenceSummaryToValue(findPreference("nodes_text"));
+
+            ListPreference modelPreference = (ListPreference)findPreference("models_list");
+            if (modelPreference.getValue() == null)
+                modelPreference.setValueIndex(0);
+            bindPreferenceSummaryToValue(modelPreference);
+
+            ListPreference optimizerPreference = (ListPreference)findPreference("optimizers_list");
+            if (optimizerPreference.getValue() == null)
+                optimizerPreference.setValueIndex(0);
+            bindPreferenceSummaryToValue(optimizerPreference);
+
+            bindPreferenceSummaryToValue(findPreference("iv_low_text"));
+            bindPreferenceSummaryToValue(findPreference("iv_high_text"));
+            bindPreferenceSummaryToValue(findPreference("iv_iterations_text"));
+            bindPreferenceSummaryToValue(findPreference("iv_tolerance_text"));
         }
 
         @Override

@@ -2,26 +2,73 @@
 
     <SwitchPreference
         android:defaultValue="true"
-        android:key="smoothing"
+        android:key="@string/smoothing_preference_key"
         android:summary="@string/smoothing_description"
         android:title="@string/smoothing_label" />
 
     <SwitchPreference
         android:defaultValue="true"
-        android:key="acceleration"
+        android:key="@string/acceleration_preference_key"
         android:summary="@string/acceleration_description"
         android:title="@string/acceleration_label" />
 
-    <!-- NOTE: EditTextPreference accepts EditText attributes. -->
-    <!-- NOTE: EditTextPreference's summary should be set to its value by the activity code. -->
     <EditTextPreference
-        android:capitalize="words"
         android:defaultValue="@string/nodes_default"
         android:inputType="number"
-        android:key="nodes_text"
+        android:key="@string/nodes_preference_key"
         android:maxLines="1"
         android:selectAllOnFocus="true"
         android:singleLine="true"
         android:title="@string/nodes_label" />
+
+    <ListPreference
+        android:defaultValue="1"
+        android:entries="@array/models_array"
+        android:entryValues="@array/models_array"
+        android:key="@string/models_preference_key"
+        android:title="@string/model_type_hint" />
+
+    <ListPreference
+        android:defaultValue="1"
+        android:entries="@array/optimizer_array"
+        android:entryValues="@array/optimizer_array"
+        android:key="@string/optimizer_preference_key"
+        android:title="@string/optimizer_hint" />
+
+    <EditTextPreference
+        android:defaultValue="@string/iv_tolerance_default"
+        android:inputType="number"
+        android:key="@string/iv_tolerance_preference_key"
+        android:maxLines="1"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="@string/iv_tolerance_label" />
+
+    <EditTextPreference
+        android:defaultValue="@string/iv_low_default"
+        android:inputType="number"
+        android:key="@string/iv_low_preference_key"
+        android:maxLines="1"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="@string/iv_low_label" />
+
+    <EditTextPreference
+        android:defaultValue="@string/iv_high_default"
+        android:inputType="number"
+        android:key="@string/iv_high_preference_key"
+        android:maxLines="1"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="@string/iv_high_label" />
+
+    <EditTextPreference
+        android:defaultValue="@string/iv_iterations_default"
+        android:inputType="number"
+        android:key="@string/iv_iterations_preference_key"
+        android:maxLines="1"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="@string/iv_iterations_label" />
 
 </PreferenceScreen>

@@ -1,7 +1,9 @@
 package com.a7raiden.qdev.abp.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -10,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -34,9 +37,12 @@ import com.a7raiden.qdev.abp.calcs.interfaces.IPricingEngine;
 import com.a7raiden.qdev.abp.calcs.models.PricingEngine;
 
 import java.text.DecimalFormat;
+import java.util.Map;
 
 
 public class MainActivity extends AppCompatActivity {
+
+    private boolean isFirstRun = true;
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -86,7 +92,8 @@ public class MainActivity extends AppCompatActivity {
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
 
-        if (hasFocus) {
+        if (hasFocus && isFirstRun) {
+            isFirstRun = false;
             // fills up the default values
             runBinomialTree();
             runImpliedVolatility();
@@ -119,10 +126,8 @@ public class MainActivity extends AppCompatActivity {
     private void runBinomialTree() {
         InputData inputData = getInputData(false);
 
-        // TODO: read from settings
-        inputData.mNodes = 80;
-        inputData.mSmoothing = true;
-        inputData.mAcceleration = true;
+        setFromPreferences(inputData);
+
         IPricingEngine pe = PricingEngine.create(inputData);
         OutputData[] americanOutputs = pe.computeAnalytics();
 
@@ -134,61 +139,76 @@ public class MainActivity extends AppCompatActivity {
 
     private void runImpliedVolatility() {
         InputData inputData = getInputData(true);
-        // TODO: read from settings
-        inputData.mNodes = 80;
-        inputData.mSmoothing = true;
-        inputData.mAcceleration = true;
+        setFromPreferences(inputData);
 
-        String rootFinderTypeString =((Spinner)findViewById(R.id.optimizerSpinner)).getSelectedItem().toString();
-        rootFinderTypeString = rootFinderTypeString
-                .replace("-", "")
-                .replace(" ", "");
-        RootFinderType rootFinderType = RootFinderType.valueOf(rootFinderTypeString);
-
-        EditText editText = findViewById(R.id.toleranceEditText);
-        double tolerance = Double.parseDouble(editText.getText().toString());
-
-        editText = findViewById(R.id.optionPriceEditText);
+        EditText editText = findViewById(R.id.optionPriceEditText);
         double price = Double.parseDouble(editText.getText().toString());
 
         RadioButton rb = findViewById(R.id.callRadioButton);
         OptionType optionType = rb.isChecked() ? OptionType.Call : OptionType.Put;
 
-        RootFinderInputData rootFinderInputData = new RootFinderInputData.Builder()
-                .rootFinderType(rootFinderType)
-                .lowerPoint(1e-4)
-                .upperPoint(2.0)
-                .absTolerance(tolerance)
-                .maxIterations(200)  // TODO: make it dynamic maybe?
-                .build();
         ImpliedVolatilityInputData impliedVolatilityInputData = new ImpliedVolatilityInputData
                 .Builder()
                 .targetPrice(price)
                 .inputData(inputData)
                 .optionType(optionType)
-                .rootFinderInputData(rootFinderInputData)
+                .rootFinderInputData(new RootFinderInputData.Builder().build())
                 .build();
+
+        setFromPreferences(impliedVolatilityInputData);
         RootFinderOutputData americanOutputData = PricingEngine.computeImpliedVolatility(impliedVolatilityInputData);
 
         inputData.mModelType = ModelType.BlackScholes;
-        rootFinderInputData = new RootFinderInputData.Builder()
-                .rootFinderType(rootFinderType)
-                .lowerPoint(1e-4)
-                .upperPoint(2.0)
-                .absTolerance(tolerance)
-                .maxIterations(200)  // TODO: make it dynamic maybe?
-                .build();
         impliedVolatilityInputData = new ImpliedVolatilityInputData
                 .Builder()
                 .targetPrice(price)
                 .inputData(inputData)
                 .optionType(optionType)
-                .rootFinderInputData(rootFinderInputData)
+                .rootFinderInputData(new RootFinderInputData.Builder().build())
                 .build();
+        setFromPreferences(impliedVolatilityInputData);
         RootFinderOutputData europeanOutputData = PricingEngine.computeImpliedVolatility(impliedVolatilityInputData);
 
         populateOutputData(americanOutputData, europeanOutputData);
+    }
 
+    private void setFromPreferences(InputData inputData) {
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        Map<String, ?> allEntries = sharedPref.getAll();
+        for (Map.Entry<String, ?> entry : allEntries.entrySet()) {
+            String key = entry.getKey();
+            String val = entry.getValue().toString();
+
+            if (key.equals(getResources().getString(R.string.nodes_preference_key)))
+                inputData.mNodes = Integer.parseInt(val);
+            else if (key.equals(getResources().getString(R.string.smoothing_preference_key)))
+                inputData.mSmoothing = Boolean.parseBoolean(val);
+            else if (key.equals(getResources().getString(R.string.acceleration_preference_key)))
+                inputData.mAcceleration = Boolean.parseBoolean(val);
+            else if (key.equals(getResources().getString(R.string.models_preference_key)))
+                inputData.mModelType = ModelType.valueOf(val.replace("-", "").replace(" ", ""));
+        }
+    }
+
+    private void setFromPreferences(ImpliedVolatilityInputData inputData) {
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        Map<String, ?> allEntries = sharedPref.getAll();
+        for (Map.Entry<String, ?> entry : allEntries.entrySet()) {
+            String key = entry.getKey();
+            String val = entry.getValue().toString();
+
+            if (key.equals(getResources().getString(R.string.optimizer_preference_key)))
+                inputData.mRootFinderInputData.mRootFinderType =
+                        RootFinderType.valueOf(val.replace("-", "").replace(" ", ""));
+            if (key.equals(getResources().getString(R.string.iv_tolerance_preference_key)))
+                inputData.mRootFinderInputData.mAbsTolerance = Double.parseDouble(val);
+            if (key.equals(getResources().getString(R.string.iv_low_preference_key)))
+                inputData.mRootFinderInputData.mLowerPoint = 0.01 * Double.parseDouble(val);
+            if (key.equals(getResources().getString(R.string.iv_high_preference_key)))
+                inputData.mRootFinderInputData.mUpperPoint = 0.01 * Double.parseDouble(val);
+            if (key.equals(getResources().getString(R.string.iv_iterations_preference_key)))
+                inputData.mRootFinderInputData.mMaxIterations = Integer.parseInt(val);
+        }
     }
 
     private InputData getInputData(boolean isImpliedVolView) {
@@ -204,12 +224,6 @@ public class MainActivity extends AppCompatActivity {
             values[i] = Double.parseDouble(editText.getText().toString());
         }
 
-        String modelTypeString =((Spinner)findViewById(R.id.modelSpinner)).getSelectedItem().toString();
-        modelTypeString = modelTypeString
-                .replace("-", "")
-                .replace(" ", "");
-        ModelType modelType = ModelType.valueOf(modelTypeString);
-
         return new InputData.Builder()
                 .spot(values[0])
                 .strike(values[1])
@@ -217,7 +231,6 @@ public class MainActivity extends AppCompatActivity {
                 .carryRate(values[3] * 0.01)
                 .volatility(values[4] * 0.01)
                 .expiry(values[5])
-                .modelType(modelType)
                 .build();
     }
 
@@ -268,9 +281,9 @@ public class MainActivity extends AppCompatActivity {
 
     private void populateOutputData(RootFinderOutputData americanData, RootFinderOutputData europeanData) {
         TextView americanIv = findViewById(R.id.outputAmericanImpliedVolatilityTextView);
-        americanIv.setText(new DecimalFormat("#0.0000").format(americanData.mRoot));
+        americanIv.setText(new DecimalFormat("#0.0000").format(100 * americanData.mRoot));
         TextView europeanIv = findViewById(R.id.outputEuropeanImpliedVolatilityTextView);
-        europeanIv.setText(new DecimalFormat("#0.0000").format(europeanData.mRoot));
+        europeanIv.setText(new DecimalFormat("#0.0000").format(100 * europeanData.mRoot));
 
         TextView americanIter = findViewById(R.id.outputAmericanIterationTextView);
         americanIter.setText(new DecimalFormat("#0").format(americanData.mIterations));

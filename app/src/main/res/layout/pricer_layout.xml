@@ -196,28 +196,6 @@
 
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <TextView
-                    android:id="@+id/modelTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/model_type_label"
-                    android:textAppearance="@style/TextAppearance.AppCompat" />
-
-                <Spinner
-                    android:id="@+id/modelSpinner"
-                    android:layout_width="0dp"
-                    android:layout_height="32dp"
-                    android:layout_weight="1" />
-
-
-            </LinearLayout>
-
         </LinearLayout>
     </ScrollView>
 

@@ -32,7 +32,7 @@
     <string name="expiry_default">1</string>
 
     <string name="model_type_label">Model Type:</string>
-    <string name="model_type_hint">Model Type</string>
+    <string name="model_type_hint">Binomial Tree Type</string>
     <string-array name="models_array">
         <item>Cox-Rubinstein-Ross</item>
         <item>Jarrow-Rudd Neutral</item>
@@ -42,7 +42,7 @@
     </string-array>
 
     <string name="optimizer_label">Optimizer:</string>
-    <string name="optimizer_hint">Optimizer</string>
+    <string name="optimizer_hint">Implied Volatility Root Finder</string>
     <string-array name="optimizer_array">
         <item>Bisection</item>
         <item>Brent</item>
@@ -53,6 +53,7 @@
     <string name="option_price_hint">Option Price</string>
     <string name="option_price_default">12</string>
 
+    <string name="option_type_label">Option Type:</string>
     <string name="option_type_call">Call</string>
     <string name="option_type_put">Put</string>
 
@@ -86,7 +87,7 @@
     <string name="put_vega_label">Put Vega:</string>
     <string name="put_vega_hint">Put Vega</string>
 
-    <string name="implied_volatility_label">Implied Volatility:</string>
+    <string name="implied_volatility_label">Implied Volatility (%):</string>
     <string name="implied_volatility_hint">Implied Volatility</string>
 
     <string name="implied_volatility_iterations_label">Iterations:</string>
@@ -111,9 +112,28 @@
     </string>
 
     <string name="nodes_label">Nodes</string>
-    <string name="nodes_description">
-        Number of grid points to use for Binomial Tree
-    </string>
     <string name="nodes_default">120</string>
+
+    <string name="iv_low_label">Implied Volatility Minimum (%)</string>
+    <string name="iv_low_default">1</string>
+
+    <string name="iv_high_label">Implied Volatility Maximum (%)</string>
+    <string name="iv_high_default">200</string>
+
+    <string name="iv_iterations_label">Implied Volatility Maximum Iterations</string>
+    <string name="iv_iterations_default">200</string>
+
+    <string name="iv_tolerance_label">Implied Volatility Absolute Tolerance</string>
+    <string name="iv_tolerance_default">0.00000001</string>
+
+    <string name="nodes_preference_key">nodes_text</string>
+    <string name="acceleration_preference_key">acceleration</string>
+    <string name="smoothing_preference_key">smoothing</string>
+    <string name="models_preference_key">models_list</string>
+    <string name="optimizer_preference_key">optimizers_list</string>
+    <string name="iv_low_preference_key">iv_low_text</string>
+    <string name="iv_high_preference_key">iv_high_text</string>
+    <string name="iv_iterations_preference_key">iv_iterations_text</string>
+    <string name="iv_tolerance_preference_key">iv_tolerance_text</string>
 
 </resources>
