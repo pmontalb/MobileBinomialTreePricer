@@ -11,15 +11,19 @@ import java.util.function.Function;
  */
 
 public abstract class RootFinder implements IRootFinder {
-    protected Function<Double, Double> mObjectiveFunction;
+    public interface IObjectiveFunction {
+        double compute(double x);
+    };
+
+    IObjectiveFunction mObjectiveFunction;
 
     static final double eps = Math.ulp(1.0);
 
-    public RootFinder(Function<Double, Double> objectiveFunction) {
+    RootFinder(IObjectiveFunction objectiveFunction) {
         mObjectiveFunction = objectiveFunction;
     }
 
-    public static IRootFinder create(RootFinderType rootFinderType, Function<Double, Double> objectiveFunction) {
+    public static IRootFinder create(RootFinderType rootFinderType, IObjectiveFunction objectiveFunction) {
         switch (rootFinderType) {
             case Bisection:
                 return new BisectionRootFinder(objectiveFunction);

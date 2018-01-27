@@ -10,13 +10,13 @@ import java.util.function.Function;
  */
 
 public class BisectionRootFinder extends RootFinder {
-    public BisectionRootFinder(Function<Double, Double> objectiveFunction) {
+    public BisectionRootFinder(IObjectiveFunction objectiveFunction) {
         super(objectiveFunction);
     }
 
     @Override
     public RootFinderOutputData solve(RootFinderInputData rootFinderInputData) {
-        if(mObjectiveFunction.apply(rootFinderInputData.mLowerPoint) * mObjectiveFunction.apply(rootFinderInputData.mUpperPoint) >= 0)
+        if(mObjectiveFunction.compute(rootFinderInputData.mLowerPoint) * mObjectiveFunction.compute(rootFinderInputData.mUpperPoint) >= 0)
             return new RootFinderOutputData(-1, -1, false);
 
         int iterations = 0;
@@ -25,10 +25,10 @@ public class BisectionRootFinder extends RootFinder {
             ++iterations;
 
             double midPoint = .5 * (rootFinderInputData.mLowerPoint + rootFinderInputData.mUpperPoint);
-            if (Math.abs(mObjectiveFunction.apply(midPoint)) <= rootFinderInputData.mAbsTolerance)
+            if (Math.abs(mObjectiveFunction.compute(midPoint)) <= rootFinderInputData.mAbsTolerance)
                 return new RootFinderOutputData(midPoint, iterations, true);
 
-            else if (mObjectiveFunction.apply(midPoint)*mObjectiveFunction.apply(rootFinderInputData.mLowerPoint) < 0)
+            else if (mObjectiveFunction.compute(midPoint)*mObjectiveFunction.compute(rootFinderInputData.mLowerPoint) < 0)
                 rootFinderInputData.mUpperPoint = midPoint;
             else
                 rootFinderInputData.mLowerPoint = midPoint;

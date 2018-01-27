@@ -82,10 +82,10 @@ public abstract class PricingEngine implements IPricingEngine {
         IRootFinder rootFinder = RootFinder.create(
                 impliedVolatilityInputData.mRootFinderInputData.mRootFinderType,
                 sigma -> {
-                        InputData inputData = new InputData(impliedVolatilityInputData.mInputData);
-                        inputData.mVolatility = sigma;
-                        PricingEngine pe = PricingEngine.create(inputData);
-                        return pe.price(inputData)[outputIdx] - impliedVolatilityInputData.mTargetPrice;
+                    InputData inputData = new InputData(impliedVolatilityInputData.mInputData);
+                    inputData.mVolatility = sigma;
+                    PricingEngine pe = PricingEngine.create(inputData);
+                    return pe.price(inputData)[outputIdx] - impliedVolatilityInputData.mTargetPrice;
                 });
 
         return rootFinder.solve(impliedVolatilityInputData.mRootFinderInputData);

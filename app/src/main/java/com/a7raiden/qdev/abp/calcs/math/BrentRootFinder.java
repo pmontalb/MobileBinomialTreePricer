@@ -11,7 +11,7 @@ import java.util.function.Function;
 
 public class BrentRootFinder extends RootFinder {
 
-    public BrentRootFinder(Function<Double, Double> objectiveFunction) {
+    public BrentRootFinder(IObjectiveFunction objectiveFunction) {
         super(objectiveFunction);
     }
 
@@ -57,7 +57,7 @@ public class BrentRootFinder extends RootFinder {
         w = x;
         v = w;
         e = 0.0;
-        fx = mObjectiveFunction.apply ( x );
+        fx = mObjectiveFunction.compute( x );
         fw = fx;
         fv = fw;
 
@@ -153,7 +153,7 @@ public class BrentRootFinder extends RootFinder {
                 u = x - tol;
             }
 
-            fu = mObjectiveFunction.apply ( u );
+            fu = mObjectiveFunction.compute ( u );
 //
 //  Update A, B, V, W, and X.
 //

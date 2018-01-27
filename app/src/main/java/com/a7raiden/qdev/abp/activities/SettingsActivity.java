@@ -145,13 +145,9 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             bindPreferenceSummaryToValue(findPreference("nodes_text"));
 
             ListPreference modelPreference = (ListPreference)findPreference("models_list");
-            if (modelPreference.getValue() == null)
-                modelPreference.setValueIndex(0);
             bindPreferenceSummaryToValue(modelPreference);
 
             ListPreference optimizerPreference = (ListPreference)findPreference("optimizers_list");
-            if (optimizerPreference.getValue() == null)
-                optimizerPreference.setValueIndex(0);
             bindPreferenceSummaryToValue(optimizerPreference);
 
             bindPreferenceSummaryToValue(findPreference("iv_low_text"));

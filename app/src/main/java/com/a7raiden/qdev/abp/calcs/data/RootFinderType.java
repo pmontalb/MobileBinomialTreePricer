@@ -8,5 +8,8 @@ public enum RootFinderType {
     Null,
     Bisection,
     Brent,
-    Toms348
+    Toms348;
+
+    private static RootFinderType[] allValues = values();
+    public static RootFinderType parseInt(int n) {return allValues[n];}
 }

@@ -5,6 +5,7 @@ package com.a7raiden.qdev.abp.calcs.math;
 import com.a7raiden.qdev.abp.calcs.data.RootFinderInputData;
 import com.a7raiden.qdev.abp.calcs.data.RootFinderOutputData;
 
+import java.io.IOError;
 import java.util.function.Function;
 
 /**
@@ -13,7 +14,7 @@ import java.util.function.Function;
 
 public class Toms348RootFinder extends RootFinder {
 
-    public Toms348RootFinder(Function<Double, Double> objectiveFunction) {
+    public Toms348RootFinder(IObjectiveFunction objectiveFunction) {
         super(objectiveFunction);
     }
 
@@ -35,7 +36,7 @@ public class Toms348RootFinder extends RootFinder {
      */
     @Override
     public RootFinderOutputData solve(RootFinderInputData rootFinderInputData) {
-        Function<Double, Double> f = mObjectiveFunction;  // just for readability
+        IObjectiveFunction f = mObjectiveFunction;  // just for readability
         double lambda = .7;
         double mu = .5;
 
@@ -43,7 +44,7 @@ public class Toms348RootFinder extends RootFinder {
         double b = rootFinderInputData.mUpperPoint;
 
         // TODO accept a scalar guess and try to construct our own bracket
-        if (a >= b || f.apply(a) * f.apply(b) >= 0)
+        if (a >= b || f.compute(a) * f.compute(b) >= 0)
             return new RootFinderOutputData(-1, -1, false);
 
         // start with a secant approximation
@@ -94,9 +95,9 @@ public class Toms348RootFinder extends RootFinder {
             }
 
             // double length secant step, if we fail, use bisection
-            double u = Math.abs(f.apply(aStar)) < Math.abs(f.apply(bStar)) ? aStar : bStar;
+            double u = Math.abs(f.compute(aStar)) < Math.abs(f.compute(bStar)) ? aStar : bStar;
 
-            cStar = u - 2 * f.apply(u) / (f.apply(bStar) - f.apply(aStar)) * (bStar - aStar);
+            cStar = u - 2 * f.compute(u) / (f.compute(bStar) - f.compute(aStar)) * (bStar - aStar);
             ch = Math.abs(cStar - u) > (bStar - aStar) / 2 ? aStar + (bStar - aStar) / 2 : cStar;
 
             // re-bracket and check termination
@@ -161,9 +162,9 @@ public class Toms348RootFinder extends RootFinder {
     BracketData bracket(double a, double b, double c, double tolerance, double lambda) {
         if (!(a <= c && c <= b))
             return new BracketData(false, new double[]{ -1.0 });
-        Function<Double, Double> f = mObjectiveFunction;  // just for readability
-        double fa = f.apply(a);
-        double fb = f.apply(b);
+        IObjectiveFunction f = mObjectiveFunction;  // just for readability
+        double fa = f.compute(a);
+        double fb = f.compute(b);
         double delta = lambda * scaledTolerance(a, b, fa, fb, tolerance);
 
         if ((b - a) <= 4.0 * delta)
@@ -174,7 +175,7 @@ public class Toms348RootFinder extends RootFinder {
             c = b - 2.0 * delta;
 
         double aStar, bStar, dStar;
-        double fc = f.apply(c);
+        double fc = f.compute(c);
         if (fc == 0)
             return new BracketData(true, new double[]{c, fc});
         else if (Math.signum(fa) * Math.signum(fc) < 0) {
@@ -188,8 +189,8 @@ public class Toms348RootFinder extends RootFinder {
             dStar = a;
         }
 
-        double fAstar = f.apply(aStar);
-        double fbStar = f.apply(bStar);
+        double fAstar = f.compute(aStar);
+        double fbStar = f.compute(bStar);
         if (bStar - aStar < 2 * scaledTolerance(aStar, bStar, fAstar, fbStar, tolerance)) {
             double x0, fx0;
             if (Math.abs(fAstar) < Math.abs(fbStar)) {
@@ -227,8 +228,8 @@ public class Toms348RootFinder extends RootFinder {
      * @return
      */
     double secant(double a, double b) {
-        Function<Double, Double> f = mObjectiveFunction;  // just for readability
-        double c = a - f.apply(a) / (f.apply(b) - f.apply(a)) * (b - a);
+        IObjectiveFunction f = mObjectiveFunction;  // just for readability
+        double c = a - f.compute(a) / (f.compute(b) - f.compute(a)) * (b - a);
 
         double tol = eps * 5;
         if (c <= a + Math.abs(a) * tol || c >= b - Math.abs(b) * tol)
@@ -248,10 +249,10 @@ public class Toms348RootFinder extends RootFinder {
      * @return
      */
     double newtonQuadratic(double a, double b, double d, int k) {
-        Function<Double, Double> f = mObjectiveFunction;  // just for readability
-        double fa = f.apply(a);
-        double fb = f.apply(b);
-        double fd = f.apply(d);
+        IObjectiveFunction f = mObjectiveFunction;  // just for readability
+        double fa = f.compute(a);
+        double fb = f.compute(b);
+        double fd = f.compute(d);
 
         double B = (fb - fa) / (b - a);
         double A = ((fd - fb) / (d - b) - B) / (d - a);
@@ -278,11 +279,11 @@ public class Toms348RootFinder extends RootFinder {
      * @return
      */
     boolean areDistinct(double a, double b, double d, double e) {
-        Function<Double, Double> f = mObjectiveFunction;  // just for readability
-        double f1 = f.apply(a);
-        double f2 = f.apply(b);
-        double f3 = f.apply(d);
-        double f4 = f.apply(e);
+        IObjectiveFunction f = mObjectiveFunction;  // just for readability
+        double f1 = f.compute(a);
+        double f2 = f.compute(b);
+        double f3 = f.compute(d);
+        double f4 = f.compute(e);
         return !(almostEqual(f1, f2) || almostEqual(f1, f3) || almostEqual(f1, f4) ||
                 almostEqual(f2, f3) || almostEqual(f2, f4) || almostEqual(f3, f4));
     }
@@ -298,11 +299,11 @@ public class Toms348RootFinder extends RootFinder {
      * @return
      */
     double inverseCubicInterpolationRoot(double a, double b, double c, double d) {
-        Function<Double, Double> f = mObjectiveFunction;  // just for readability
-        double fa = f.apply(a);
-        double fb = f.apply(b);
-        double fc = f.apply(c);
-        double fd = f.apply(d);
+        IObjectiveFunction f = mObjectiveFunction;  // just for readability
+        double fa = f.compute(a);
+        double fb = f.compute(b);
+        double fc = f.compute(c);
+        double fd = f.compute(d);
 
         double Q11 = (c - d) * fc / (fd - fc);
         double Q21 = (b - c) * fb / (fc - fb);

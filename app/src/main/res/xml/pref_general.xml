@@ -24,14 +24,14 @@
     <ListPreference
         android:defaultValue="1"
         android:entries="@array/models_array"
-        android:entryValues="@array/models_array"
+        android:entryValues="@array/models_array_id"
         android:key="@string/models_preference_key"
         android:title="@string/model_type_hint" />
 
     <ListPreference
         android:defaultValue="1"
         android:entries="@array/optimizer_array"
-        android:entryValues="@array/optimizer_array"
+        android:entryValues="@array/optimizers_array_id"
         android:key="@string/optimizer_preference_key"
         android:title="@string/optimizer_hint" />
 

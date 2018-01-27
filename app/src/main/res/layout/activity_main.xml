@@ -26,8 +26,8 @@
             app:title="@string/app_name">
 
             <Button
-                style="@android:style/Widget.Material.Light.Button.Borderless.Small"
                 android:id="@+id/runButton"
+                style="@android:style/Widget.Material.Light.Button.Borderless.Small"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"

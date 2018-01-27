@@ -1,9 +1,7 @@
 package com.a7raiden.qdev.abp.activities;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -12,14 +10,12 @@ import android.support.v7.widget.Toolbar;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.a7raiden.qdev.abp.R;
@@ -66,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
@@ -114,9 +111,13 @@ public class MainActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_nodes) {
+        if (id == R.id.action_settings) {
             startActivity(new Intent(this, SettingsActivity.class));
+            return true;
+        }
+
+        if (id == R.id.action_help) {
+            startActivity(new Intent(this, HelpActivity.class));
             return true;
         }
 
@@ -186,7 +187,14 @@ public class MainActivity extends AppCompatActivity {
             else if (key.equals(getResources().getString(R.string.acceleration_preference_key)))
                 inputData.mAcceleration = Boolean.parseBoolean(val);
             else if (key.equals(getResources().getString(R.string.models_preference_key)))
-                inputData.mModelType = ModelType.valueOf(val.replace("-", "").replace(" ", ""));
+                inputData.mModelType = ModelType.parseInt(Integer.parseInt(val.replace("-", "").replace(" ", "")));
+        }
+
+        if (allEntries.isEmpty()) {
+            inputData.mNodes = 120;
+            inputData.mSmoothing = true;
+            inputData.mAcceleration = true;
+            inputData.mModelType = ModelType.CoxRubinsteinRoss;
         }
     }
 
@@ -199,7 +207,7 @@ public class MainActivity extends AppCompatActivity {
 
             if (key.equals(getResources().getString(R.string.optimizer_preference_key)))
                 inputData.mRootFinderInputData.mRootFinderType =
-                        RootFinderType.valueOf(val.replace("-", "").replace(" ", ""));
+                        RootFinderType.parseInt(Integer.parseInt(val.replace("-", "").replace(" ", "")));
             if (key.equals(getResources().getString(R.string.iv_tolerance_preference_key)))
                 inputData.mRootFinderInputData.mAbsTolerance = Double.parseDouble(val);
             if (key.equals(getResources().getString(R.string.iv_low_preference_key)))
@@ -208,6 +216,14 @@ public class MainActivity extends AppCompatActivity {
                 inputData.mRootFinderInputData.mUpperPoint = 0.01 * Double.parseDouble(val);
             if (key.equals(getResources().getString(R.string.iv_iterations_preference_key)))
                 inputData.mRootFinderInputData.mMaxIterations = Integer.parseInt(val);
+        }
+
+        if (allEntries.isEmpty()) {
+            inputData.mRootFinderInputData.mRootFinderType = RootFinderType.Bisection;
+            inputData.mRootFinderInputData.mAbsTolerance = 1e-8;
+            inputData.mRootFinderInputData.mLowerPoint = 0.01;
+            inputData.mRootFinderInputData.mUpperPoint = 2;
+            inputData.mRootFinderInputData.mMaxIterations = 200;
         }
     }
 

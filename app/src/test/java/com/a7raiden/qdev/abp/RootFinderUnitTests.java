@@ -18,7 +18,7 @@ public class RootFinderUnitTests {
             if (rootFinderType == RootFinderType.Null || rootFinderType == RootFinderType.Brent)
                 continue;
 
-            Function<Double, Double> obj = x -> Math.sin(x) - .5 * x;
+            RootFinder.IObjectiveFunction obj = x -> Math.sin(x) - .5 * x;
             IRootFinder rootFinder = RootFinder.create(rootFinderType, obj);
 
             RootFinderInputData rootFinderInputData = new RootFinderInputData.Builder()
@@ -35,7 +35,7 @@ public class RootFinderUnitTests {
 
     @Test
     public void problem2() throws Exception {
-        Function<Double, Double> obj = x -> {
+        RootFinder.IObjectiveFunction obj = x -> {
             double ret = 0.0;
             for (int i = 1; i < 20; ++i)
                 ret += -2.0 * (2 * i - 5) * (2 * i - 5) / ((x - i * i) * (x - i * i) * (x - i * i));
