@@ -10,11 +10,15 @@ import android.text.Html;
 import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
 import android.view.MenuItem;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.TextView;
 
 import com.a7raiden.qdev.abp.R;
 import com.a7raiden.qdev.abp.utils.FontManager;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 public class HelpActivity extends AppCompatActivity {
 
@@ -66,10 +70,25 @@ public class HelpActivity extends AppCompatActivity {
         setContentView(R.layout.activity_help);
         setupActionBar();
 
-        // Read the arguments from the Intent object.
-        TextView textView = findViewById(R.id.helpTextView);
-        textView.setMovementMethod(LinkMovementMethod.getInstance());
-        textView.setText(fromHtml(getResources().getString(R.string.help_content)));
+        // Read the html into string
+        WebView webView = findViewById(R.id.helpWebView);
+        webView.loadUrl("file:///android_asset/help.html");
+//        InputStream is;
+//        int size;
+//        byte[] buffer;
+//        try {
+//            is = getAssets().open("help.html");
+//            size = is.available();
+//            buffer = new byte[size];
+//            is.read(buffer);
+//            is.close();
+//        } catch (IOException e) {
+//            return;
+//        }
+//
+//        // load into the WebView
+//        String htmlText = new String(buffer);
+//        webView.loadData(htmlText, "text/html", null);
 
         Typeface iconFont = FontManager.getTypeface(getApplicationContext(), FontManager.FONTAWESOME);
         FontManager.setFontToContainer(findViewById(R.id.contactsLinearLayout), iconFont);
