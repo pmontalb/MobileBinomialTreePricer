@@ -43,6 +43,6 @@ public abstract class RootFinder implements IRootFinder {
      * @return
      */
     static boolean almostEqual(double x, double y) {
-        return Math.abs(x - y) > eps;
+        return Math.abs(x - y) < eps;
     }
 }
