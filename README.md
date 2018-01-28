@@ -46,5 +46,14 @@ The trees implemented are the:
 All these trees have been extensively studied in
 <a href=http://fbe.unimelb.edu.au/__data/assets/pdf_file/0010/2591884/170.pdf>this</a> paper.
 
+As regards the Implied Volatiltity calculation, I have implemented the following root finders:
+- Bisection
+- Brent
+- Toms 348
+
+The latter exhibits the least number of iterations and it's the recommended one. As you find out in the code, the Brent implementation has been adpated from Apache common math library, whilst the Toms 348 has been adapted from user <a href=https://gist.github.com/jtravs/>jtravs</a>.
+
+Finally, this is by no means something finished. The error handling can be improved notifying the user on what went wrong. The user is assumed to be someone with notions of stochastic calculus and/or binomial lattice modelling.
+
 For an online Generalized Black-Scholes calculator that shows formulae and plots
 please visit my website <a href=http:option-pricer.ml>option-pricer.ml</a>.
