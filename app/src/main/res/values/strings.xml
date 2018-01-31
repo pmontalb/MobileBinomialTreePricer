@@ -41,11 +41,11 @@
         <item>Joshi</item>
     </string-array>
     <string-array name="models_array_id">
-        <item>1</item>
         <item>2</item>
         <item>3</item>
         <item>4</item>
         <item>5</item>
+        <item>6</item>
     </string-array>
 
     <string name="optimizer_label">Optimizer:</string>
@@ -152,14 +152,6 @@
     <string name="iv_tolerance_preference_key">iv_tolerance_text</string>
     <string name="title_item_list">Items</string>
     <string name="title_item_detail">Item Detail</string>
-
-    <string name="help_content_id">help_content_id</string>
-    <string name="help_content">
-        <![CDATA[
-
-          ]]>
-
-    </string>
 
     <string name="fa_github_square">&#xf092;</string>
     <string name="fa_linkedin_square">&#xf08c;</string>

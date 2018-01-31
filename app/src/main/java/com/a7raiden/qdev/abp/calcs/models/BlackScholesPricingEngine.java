@@ -57,8 +57,8 @@ public final class BlackScholesPricingEngine extends PricingEngine {
      * Precomputes quantities that do not depend on the underlying value
      */
     private void make() {
-        double mHalfSigma2 = .5 * mInputData.mVolatility * mInputData.mVolatility;
-        mD1Addend = ((mInputData.mCarryRate + mHalfSigma2) * mCachedData.mDt - Math.log(mInputData.mStrike)) * mOneOverSigmaSqrtT;
+        double halfSigma2 = .5 * mInputData.mVolatility * mInputData.mVolatility;
+        mD1Addend = ((mInputData.mCarryRate + halfSigma2) * mCachedData.mDt - Math.log(mInputData.mStrike)) * mOneOverSigmaSqrtT;
     }
 
     /**
@@ -110,6 +110,7 @@ public final class BlackScholesPricingEngine extends PricingEngine {
 
     public BlackScholesPricingEngine(InputData inputData, CachedData cachedData) {
         super(inputData);
+        mCurrentS = inputData.mSpot;
         mCachedData = new CachedData(cachedData);
 
         mOneOverSigmaSqrtT = 1.0 / mCachedData.mSigmaSqrtDt;

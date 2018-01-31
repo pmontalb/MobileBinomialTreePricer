@@ -79,8 +79,11 @@ public abstract class BinomialTreePricingEngine extends PricingEngine {
 
         double[] _grid = mGrid.clone();
         int finalStep = mInputData.mNodes;
-        if (mInputData.mSmoothing) {
+        if (mInputData.mSmoothing &&
+                mInputData.mModelType != ModelType.LeisenReimer &&
+                mInputData.mModelType != ModelType.Joshi) {  // these 2 methods already have smooth convergence
             updateGrid(_grid, inputData.mSpot, finalStep);
+            --finalStep;
 
             InputData tmp = new InputData(inputData);
             tmp.mExpiry = mDt;
@@ -92,11 +95,9 @@ public abstract class BinomialTreePricingEngine extends PricingEngine {
                 callPayoff[i] = Math.max(price[0], _grid[i] - inputData.mStrike);
                 putPayoff[i] = Math.max(price[1], -_grid[i] + inputData.mStrike);
             }
-
-            --finalStep;
         }
         else {
-            for (int i = 0; i < finalStep; ++i) {
+            for (int i = 0; i <= finalStep; ++i) {
                 callPayoff[i] = Math.max(_grid[i] - inputData.mStrike, 0.0);
                 putPayoff[i] = Math.max(-_grid[i] + inputData.mStrike, 0.0);
             }
@@ -126,7 +127,7 @@ public abstract class BinomialTreePricingEngine extends PricingEngine {
         }
         else {
             ret[0] = callPayoff[0];
-            ret[1] = putPayoff[1];
+            ret[1] = putPayoff[0];
         }
         return ret;
     }
@@ -142,9 +143,6 @@ public abstract class BinomialTreePricingEngine extends PricingEngine {
     private void updateGrid(double[] grid, double S, int n)  {
         for (int i = 0; i <= n; ++i) {
             grid[i] = S * Math.pow(mU, i) * Math.pow(mD, n - i - 1);
-        }
-        for (int i = n + 1; i < grid.length; ++i) {
-            grid[i] = -1;
         }
     }
 }
