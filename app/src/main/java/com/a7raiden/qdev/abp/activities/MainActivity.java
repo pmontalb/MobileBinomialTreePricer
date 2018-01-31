@@ -187,7 +187,7 @@ public class MainActivity extends AppCompatActivity {
             else if (key.equals(getResources().getString(R.string.acceleration_preference_key)))
                 inputData.mAcceleration = Boolean.parseBoolean(val);
             else if (key.equals(getResources().getString(R.string.models_preference_key)))
-                inputData.mModelType = ModelType.parseInt(Integer.parseInt(val.replace("-", "").replace(" ", "")));
+                inputData.mModelType = ModelType.parseInt(1 + Integer.parseInt(val.replace("-", "").replace(" ", "")));
         }
 
         if (allEntries.isEmpty()) {
