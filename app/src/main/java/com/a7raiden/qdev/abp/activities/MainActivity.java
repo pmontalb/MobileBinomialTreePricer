@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.a7raiden.qdev.abp.R;
 
@@ -126,6 +127,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void runBinomialTree() {
         InputData inputData = getInputData(false);
+        if (inputData == null)
+            return;
 
         setFromPreferences(inputData);
 
@@ -140,10 +143,18 @@ public class MainActivity extends AppCompatActivity {
 
     private void runImpliedVolatility() {
         InputData inputData = getInputData(true);
+        if (inputData == null)
+            return;
         setFromPreferences(inputData);
 
         EditText editText = findViewById(R.id.optionPriceEditText);
-        double price = Double.parseDouble(editText.getText().toString());
+        String priceString = editText.getText().toString();
+        if (priceString.isEmpty())
+        {
+            Toast.makeText(this, "Please input a valid price", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        double price = Double.parseDouble(priceString);
 
         RadioButton rb = findViewById(R.id.callRadioButton);
         OptionType optionType = rb.isChecked() ? OptionType.Call : OptionType.Put;
@@ -170,6 +181,10 @@ public class MainActivity extends AppCompatActivity {
         setFromPreferences(impliedVolatilityInputData);
         RootFinderOutputData europeanOutputData = PricingEngine.computeImpliedVolatility(impliedVolatilityInputData);
 
+        if (!europeanOutputData.mHasConverged)
+            Toast.makeText(this, "European IV has not converged", Toast.LENGTH_SHORT).show();
+        if (!americanOutputData.mHasConverged)
+            Toast.makeText(this, "American IV has not converged", Toast.LENGTH_SHORT).show();
         populateOutputData(americanOutputData, europeanOutputData);
     }
 
@@ -237,6 +252,10 @@ public class MainActivity extends AppCompatActivity {
                     this.getApplicationContext().getPackageName()));
             if (editText == null)
                 continue; // means that current view is not interested in this item
+            if (editText.getText().toString().isEmpty()) {
+                Toast.makeText(this, "Please input a valid " + names[i], Toast.LENGTH_SHORT).show();
+                return null;
+            }
             values[i] = Double.parseDouble(editText.getText().toString());
         }
 

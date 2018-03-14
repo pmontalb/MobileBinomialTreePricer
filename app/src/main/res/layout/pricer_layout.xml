@@ -5,653 +5,679 @@
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-    <ScrollView
-        android:id="@+id/input"
+    <RelativeLayout
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:clipToPadding="false"
-        android:fillViewport="true"
-        app:layout_constraintBottom_toTopOf="@+id/output"
+        android:layout_height="0dp"
+        android:layout_marginBottom="13dp"
+        android:layout_marginStart="1dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <LinearLayout
+        <ScrollView
+            android:id="@+id/input"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginStart="8dp"
-            android:orientation="vertical"
-            app:layout_constraintBottom_toTopOf="@+id/output"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
+            android:clipToPadding="false"
+            android:fillViewport="false"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:paddingBottom="50dp">
 
-                <TextView
-                    android:id="@+id/spotTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/spot_label"
-                    android:textAppearance="@style/TextAppearance.AppCompat" />
-
-                <EditText
-                    android:id="@+id/spotEditText"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp"
                     android:layout_marginStart="8dp"
-                    android:ems="3"
-                    android:hint="@string/spot_hint"
-                    android:inputType="numberDecimal"
-                    android:selectAllOnFocus="false"
-                    android:text="@string/spot_default"
-                    android:textAlignment="textEnd" />
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    app:layout_constraintBottom_toTopOf="@+id/outputAmericanContainer"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <TextView
+                            android:id="@+id/spotTextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/spot_label"
+                            android:textAppearance="@style/TextAppearance.AppCompat" />
+
+                        <EditText
+                            android:id="@+id/spotEditText"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:ems="3"
+                            android:hint="@string/spot_hint"
+                            android:inputType="numberDecimal"
+                            android:selectAllOnFocus="false"
+                            android:text="@string/spot_default"
+                            android:textAlignment="textEnd" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <TextView
+                            android:id="@+id/strikeTextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/strike_label"
+                            android:textAppearance="@style/TextAppearance.AppCompat" />
+
+                        <EditText
+                            android:id="@+id/strikeEditText"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:ems="3"
+                            android:hint="@string/strike_hint"
+                            android:inputType="numberDecimal"
+                            android:selectAllOnFocus="false"
+                            android:singleLine="true"
+                            android:text="@string/strike_default"
+                            android:textAlignment="textEnd" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <TextView
+                            android:id="@+id/riskFreeRateTextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/risk_free_rate_label"
+                            android:textAppearance="@style/TextAppearance.AppCompat" />
+
+                        <EditText
+                            android:id="@+id/riskFreeRateEditText"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:ems="3"
+                            android:hint="@string/risk_free_rate_hint"
+                            android:inputType="numberSigned|numberDecimal"
+                            android:selectAllOnFocus="false"
+                            android:singleLine="true"
+                            android:text="@string/risk_free_rate_default"
+                            android:textAlignment="textEnd" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <TextView
+                            android:id="@+id/carryRateTextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/carry_rate_label"
+                            android:textAppearance="@style/TextAppearance.AppCompat" />
+
+                        <EditText
+                            android:id="@+id/carryRateEditText"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:ems="3"
+                            android:hint="@string/carry_rate_hint"
+                            android:inputType="numberSigned|numberDecimal"
+                            android:selectAllOnFocus="false"
+                            android:singleLine="true"
+                            android:text="@string/carry_rate_default"
+                            android:textAlignment="textEnd" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <TextView
+                            android:id="@+id/volatilityTextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/volatility_label"
+                            android:textAppearance="@style/TextAppearance.AppCompat" />
+
+                        <EditText
+                            android:id="@+id/volatilityEditText"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:ems="3"
+                            android:hint="@string/volatility_hint"
+                            android:inputType="numberDecimal"
+                            android:selectAllOnFocus="false"
+                            android:singleLine="true"
+                            android:text="@string/volatility_default"
+                            android:textAlignment="textEnd" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <TextView
+                            android:id="@+id/expiryTextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/expiry_label"
+                            android:textAppearance="@style/TextAppearance.AppCompat" />
+
+                        <EditText
+                            android:id="@+id/expiryEditText"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:ems="3"
+                            android:hint="@string/expiry_hint"
+                            android:inputType="numberDecimal"
+                            android:selectAllOnFocus="false"
+                            android:singleLine="true"
+                            android:text="@string/expiry_default"
+                            android:textAlignment="textEnd" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/outputAmericanContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="16dp"
+                    android:background="@drawable/border"
+                    android:orientation="vertical"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/input">
+
+                    <TableLayout
+                        android:id="@+id/outputAmerican"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:stretchColumns="*">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/american_options_label"
+                            android:textAlignment="center"
+                            android:textAppearance="@style/TextAppearance.AppCompat"
+                            android:textStyle="bold" />
+
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <TextView
+                                android:id="@+id/outputAmericanCallPriceLabelTextView"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/border"
+                                android:paddingEnd="4dp"
+                                android:paddingStart="4dp"
+                                android:text="@string/call_price_label"
+                                android:textAppearance="@style/TextAppearance.AppCompat"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/outputAmericanCallPriceTextView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/border"
+                                android:paddingEnd="4dp"
+                                android:paddingStart="4dp"
+                                android:text="@string/output_default"
+                                android:textAlignment="center"
+                                android:textAppearance="@style/TextAppearance.AppCompat" />
+
+                            <TextView
+                                android:id="@+id/outputAmericanPutPriceLabelTextView"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/border"
+                                android:paddingEnd="4dp"
+                                android:paddingStart="4dp"
+                                android:text="@string/put_price_label"
+                                android:textAppearance="@style/TextAppearance.AppCompat"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/outputAmericanPutPriceTextView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/border"
+                                android:paddingEnd="4dp"
+                                android:paddingStart="4dp"
+                                android:text="@string/output_default"
+                                android:textAlignment="center"
+                                android:textAppearance="@style/TextAppearance.AppCompat" />
+                        </TableRow>
+
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <TextView
+                                android:id="@+id/outputAmericanCallDeltaLabelTextView"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/border"
+                                android:paddingEnd="4dp"
+                                android:paddingStart="4dp"
+                                android:text="@string/call_delta_label"
+                                android:textAppearance="@style/TextAppearance.AppCompat"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/outputAmericanCallDeltaTextView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/border"
+                                android:paddingEnd="4dp"
+                                android:paddingStart="4dp"
+                                android:text="@string/output_default"
+                                android:textAlignment="center"
+                                android:textAppearance="@style/TextAppearance.AppCompat" />
+
+                            <TextView
+                                android:id="@+id/outputAmericanPutDeltaLabelTextView"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/border"
+                                android:paddingEnd="4dp"
+                                android:paddingStart="4dp"
+                                android:text="@string/put_delta_label"
+                                android:textAppearance="@style/TextAppearance.AppCompat"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/outputAmericanPutDeltaTextView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/border"
+                                android:paddingEnd="4dp"
+                                android:paddingStart="4dp"
+                                android:text="@string/output_default"
+                                android:textAlignment="center"
+                                android:textAppearance="@style/TextAppearance.AppCompat" />
+                        </TableRow>
+
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <TextView
+                                android:id="@+id/outputAmericanCallGammaLabelTextView"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/border"
+                                android:paddingEnd="4dp"
+                                android:paddingStart="4dp"
+                                android:text="@string/call_gamma_label"
+                                android:textAppearance="@style/TextAppearance.AppCompat"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/outputAmericanCallGammaTextView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/border"
+                                android:paddingEnd="4dp"
+                                android:paddingStart="4dp"
+                                android:text="@string/output_default"
+                                android:textAlignment="center"
+                                android:textAppearance="@style/TextAppearance.AppCompat" />
+
+                            <TextView
+                                android:id="@+id/outputAmericanPutGammaLabelTextView"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/border"
+                                android:paddingEnd="4dp"
+                                android:paddingStart="4dp"
+                                android:text="@string/put_gamma_label"
+                                android:textAppearance="@style/TextAppearance.AppCompat"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/outputAmericanPutGammaTextView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/border"
+                                android:paddingEnd="4dp"
+                                android:paddingStart="4dp"
+                                android:text="@string/output_default"
+                                android:textAlignment="center"
+                                android:textAppearance="@style/TextAppearance.AppCompat" />
+                        </TableRow>
+
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <TextView
+                                android:id="@+id/outputAmericanCallVegaLabelTextView"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/border"
+                                android:paddingEnd="4dp"
+                                android:paddingStart="4dp"
+                                android:text="@string/call_vega_label"
+                                android:textAppearance="@style/TextAppearance.AppCompat"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/outputAmericanCallVegaTextView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/border"
+                                android:paddingEnd="4dp"
+                                android:paddingStart="4dp"
+                                android:text="@string/output_default"
+                                android:textAlignment="center"
+                                android:textAppearance="@style/TextAppearance.AppCompat" />
+
+                            <TextView
+                                android:id="@+id/outputAmericanPutVegaLabelTextView"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/border"
+                                android:paddingEnd="4dp"
+                                android:paddingStart="4dp"
+                                android:text="@string/put_vega_label"
+                                android:textAppearance="@style/TextAppearance.AppCompat"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/outputAmericanPutVegaTextView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/border"
+                                android:paddingEnd="4dp"
+                                android:paddingStart="4dp"
+                                android:text="@string/output_default"
+                                android:textAlignment="center"
+                                android:textAppearance="@style/TextAppearance.AppCompat" />
+                        </TableRow>
+                    </TableLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/outputEuropeanContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/border"
+                    android:orientation="vertical"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/outputAmericanContainer">
+
+                    <TableLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:stretchColumns="*"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/outputAmerican">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/european_options_label"
+                            android:textAlignment="center"
+                            android:textAppearance="@style/TextAppearance.AppCompat"
+                            android:textStyle="bold" />
+
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <TextView
+                                android:id="@+id/outputEuropeanCallPriceLabelTextView"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/border"
+                                android:paddingEnd="4dp"
+                                android:paddingStart="4dp"
+                                android:text="@string/call_price_label"
+                                android:textAppearance="@style/TextAppearance.AppCompat"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/outputEuropeanCallPriceTextView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/border"
+                                android:paddingEnd="4dp"
+                                android:paddingStart="4dp"
+                                android:text="@string/output_default"
+                                android:textAlignment="center"
+                                android:textAppearance="@style/TextAppearance.AppCompat" />
+
+                            <TextView
+                                android:id="@+id/outputEuropeanPutPriceLabelTextView"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/border"
+                                android:paddingEnd="4dp"
+                                android:paddingStart="4dp"
+                                android:text="@string/put_price_label"
+                                android:textAppearance="@style/TextAppearance.AppCompat"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/outputEuropeanPutPriceTextView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/border"
+                                android:paddingEnd="4dp"
+                                android:paddingStart="4dp"
+                                android:text="@string/output_default"
+                                android:textAlignment="center"
+                                android:textAppearance="@style/TextAppearance.AppCompat" />
+                        </TableRow>
+
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <TextView
+                                android:id="@+id/outputEuropeanCallDeltaLabelTextView"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/border"
+                                android:paddingEnd="4dp"
+                                android:paddingStart="4dp"
+                                android:text="@string/call_delta_label"
+                                android:textAppearance="@style/TextAppearance.AppCompat"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/outputEuropeanCallDeltaTextView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/border"
+                                android:paddingEnd="4dp"
+                                android:paddingStart="4dp"
+                                android:text="@string/output_default"
+                                android:textAlignment="center"
+                                android:textAppearance="@style/TextAppearance.AppCompat" />
+
+                            <TextView
+                                android:id="@+id/outputEuropeanPutDeltaLabelTextView"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/border"
+                                android:paddingEnd="4dp"
+                                android:paddingStart="4dp"
+                                android:text="@string/put_delta_label"
+                                android:textAppearance="@style/TextAppearance.AppCompat"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/outputEuropeanPutDeltaTextView"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:background="@drawable/border"
+                                android:paddingEnd="4dp"
+                                android:paddingStart="4dp"
+                                android:text="@string/output_default"
+                                android:textAlignment="center"
+                                android:textAppearance="@style/TextAppearance.AppCompat" />
+                        </TableRow>
+
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <TextView
+                                android:id="@+id/outputEuropeanCallGammaLabelTextView"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/border"
+                                android:paddingEnd="4dp"
+                                android:paddingStart="4dp"
+                                android:text="@string/call_gamma_label"
+                                android:textAppearance="@style/TextAppearance.AppCompat"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/outputEuropeanCallGammaTextView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/border"
+                                android:paddingEnd="4dp"
+                                android:paddingStart="4dp"
+                                android:text="@string/output_default"
+                                android:textAlignment="center"
+                                android:textAppearance="@style/TextAppearance.AppCompat" />
+
+                            <TextView
+                                android:id="@+id/outputEuropeanPutGammaLabelTextView"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/border"
+                                android:paddingEnd="4dp"
+                                android:paddingStart="4dp"
+                                android:text="@string/put_gamma_label"
+                                android:textAppearance="@style/TextAppearance.AppCompat"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/outputEuropeanPutGammaTextView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/border"
+                                android:paddingEnd="4dp"
+                                android:paddingStart="4dp"
+                                android:text="@string/output_default"
+                                android:textAlignment="center"
+                                android:textAppearance="@style/TextAppearance.AppCompat" />
+                        </TableRow>
+
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <TextView
+                                android:id="@+id/outputEuropeanCallVegaLabelTextView"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/border"
+                                android:paddingEnd="4dp"
+                                android:paddingStart="4dp"
+                                android:text="@string/call_vega_label"
+                                android:textAppearance="@style/TextAppearance.AppCompat"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/outputEuropeanCallVegaTextView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/border"
+                                android:paddingEnd="4dp"
+                                android:paddingStart="4dp"
+                                android:text="@string/output_default"
+                                android:textAlignment="center"
+                                android:textAppearance="@style/TextAppearance.AppCompat" />
+
+                            <TextView
+                                android:id="@+id/outputEuropeanPutVegaLabelTextView"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/border"
+                                android:paddingEnd="4dp"
+                                android:paddingStart="4dp"
+                                android:text="@string/put_vega_label"
+                                android:textAppearance="@style/TextAppearance.AppCompat"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/outputEuropeanPutVegaTextView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/border"
+                                android:paddingEnd="4dp"
+                                android:paddingStart="4dp"
+                                android:text="@string/output_default"
+                                android:textAlignment="center"
+                                android:textAppearance="@style/TextAppearance.AppCompat" />
+
+                        </TableRow>
+
+                    </TableLayout>
+
+                </LinearLayout>
 
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintTop_toTopOf="parent">
 
-                <TextView
-                    android:id="@+id/strikeTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/strike_label"
-                    android:textAppearance="@style/TextAppearance.AppCompat" />
+        </ScrollView>
+    </RelativeLayout>
 
-                <EditText
-                    android:id="@+id/strikeEditText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:ems="3"
-                    android:hint="@string/strike_hint"
-                    android:inputType="numberDecimal"
-                    android:selectAllOnFocus="false"
-                    android:singleLine="true"
-                    android:text="@string/strike_default"
-                    android:textAlignment="textEnd" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <TextView
-                    android:id="@+id/riskFreeRateTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/risk_free_rate_label"
-                    android:textAppearance="@style/TextAppearance.AppCompat" />
-
-                <EditText
-                    android:id="@+id/riskFreeRateEditText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:ems="3"
-                    android:hint="@string/risk_free_rate_hint"
-                    android:inputType="numberSigned|numberDecimal"
-                    android:selectAllOnFocus="false"
-                    android:singleLine="true"
-                    android:text="@string/risk_free_rate_default"
-                    android:textAlignment="textEnd" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <TextView
-                    android:id="@+id/carryRateTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/carry_rate_label"
-                    android:textAppearance="@style/TextAppearance.AppCompat" />
-
-                <EditText
-                    android:id="@+id/carryRateEditText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:ems="3"
-                    android:hint="@string/carry_rate_hint"
-                    android:inputType="numberSigned|numberDecimal"
-                    android:selectAllOnFocus="false"
-                    android:singleLine="true"
-                    android:text="@string/carry_rate_default"
-                    android:textAlignment="textEnd" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <TextView
-                    android:id="@+id/volatilityTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/volatility_label"
-                    android:textAppearance="@style/TextAppearance.AppCompat" />
-
-                <EditText
-                    android:id="@+id/volatilityEditText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:ems="3"
-                    android:hint="@string/volatility_hint"
-                    android:inputType="numberDecimal"
-                    android:selectAllOnFocus="false"
-                    android:singleLine="true"
-                    android:text="@string/volatility_default"
-                    android:textAlignment="textEnd" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <TextView
-                    android:id="@+id/expiryTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/expiry_label"
-                    android:textAppearance="@style/TextAppearance.AppCompat" />
-
-                <EditText
-                    android:id="@+id/expiryEditText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:ems="3"
-                    android:hint="@string/expiry_hint"
-                    android:inputType="numberDecimal"
-                    android:selectAllOnFocus="false"
-                    android:singleLine="true"
-                    android:text="@string/expiry_default"
-                    android:textAlignment="textEnd" />
-
-            </LinearLayout>
-
-        </LinearLayout>
-    </ScrollView>
-
-    <LinearLayout
-        android:id="@+id/output"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        android:background="@drawable/border"
-        android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/input">
-
-        <TableLayout
-            android:id="@+id/outputAmerican"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:stretchColumns="*">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/american_options_label"
-                android:textAlignment="center"
-                android:textAppearance="@style/TextAppearance.AppCompat"
-                android:textStyle="bold" />
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <TextView
-                    android:id="@+id/outputAmericanCallPriceLabelTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/border"
-                    android:paddingEnd="4dp"
-                    android:paddingStart="4dp"
-                    android:text="@string/call_price_label"
-                    android:textAppearance="@style/TextAppearance.AppCompat"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/outputAmericanCallPriceTextView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/border"
-                    android:paddingEnd="4dp"
-                    android:paddingStart="4dp"
-                    android:text="@string/output_default"
-                    android:textAlignment="center"
-                    android:textAppearance="@style/TextAppearance.AppCompat" />
-
-                <TextView
-                    android:id="@+id/outputAmericanPutPriceLabelTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/border"
-                    android:paddingEnd="4dp"
-                    android:paddingStart="4dp"
-                    android:text="@string/put_price_label"
-                    android:textAppearance="@style/TextAppearance.AppCompat"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/outputAmericanPutPriceTextView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/border"
-                    android:paddingEnd="4dp"
-                    android:paddingStart="4dp"
-                    android:text="@string/output_default"
-                    android:textAlignment="center"
-                    android:textAppearance="@style/TextAppearance.AppCompat" />
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <TextView
-                    android:id="@+id/outputAmericanCallDeltaLabelTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/border"
-                    android:paddingEnd="4dp"
-                    android:paddingStart="4dp"
-                    android:text="@string/call_delta_label"
-                    android:textAppearance="@style/TextAppearance.AppCompat"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/outputAmericanCallDeltaTextView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/border"
-                    android:paddingEnd="4dp"
-                    android:paddingStart="4dp"
-                    android:text="@string/output_default"
-                    android:textAlignment="center"
-                    android:textAppearance="@style/TextAppearance.AppCompat" />
-
-                <TextView
-                    android:id="@+id/outputAmericanPutDeltaLabelTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/border"
-                    android:paddingEnd="4dp"
-                    android:paddingStart="4dp"
-                    android:text="@string/put_delta_label"
-                    android:textAppearance="@style/TextAppearance.AppCompat"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/outputAmericanPutDeltaTextView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/border"
-                    android:paddingEnd="4dp"
-                    android:paddingStart="4dp"
-                    android:text="@string/output_default"
-                    android:textAlignment="center"
-                    android:textAppearance="@style/TextAppearance.AppCompat" />
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <TextView
-                    android:id="@+id/outputAmericanCallGammaLabelTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/border"
-                    android:paddingEnd="4dp"
-                    android:paddingStart="4dp"
-                    android:text="@string/call_gamma_label"
-                    android:textAppearance="@style/TextAppearance.AppCompat"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/outputAmericanCallGammaTextView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/border"
-                    android:paddingEnd="4dp"
-                    android:paddingStart="4dp"
-                    android:text="@string/output_default"
-                    android:textAlignment="center"
-                    android:textAppearance="@style/TextAppearance.AppCompat" />
-
-                <TextView
-                    android:id="@+id/outputAmericanPutGammaLabelTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/border"
-                    android:paddingEnd="4dp"
-                    android:paddingStart="4dp"
-                    android:text="@string/put_gamma_label"
-                    android:textAppearance="@style/TextAppearance.AppCompat"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/outputAmericanPutGammaTextView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/border"
-                    android:paddingEnd="4dp"
-                    android:paddingStart="4dp"
-                    android:text="@string/output_default"
-                    android:textAlignment="center"
-                    android:textAppearance="@style/TextAppearance.AppCompat" />
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <TextView
-                    android:id="@+id/outputAmericanCallVegaLabelTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/border"
-                    android:paddingEnd="4dp"
-                    android:paddingStart="4dp"
-                    android:text="@string/call_vega_label"
-                    android:textAppearance="@style/TextAppearance.AppCompat"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/outputAmericanCallVegaTextView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/border"
-                    android:paddingEnd="4dp"
-                    android:paddingStart="4dp"
-                    android:text="@string/output_default"
-                    android:textAlignment="center"
-                    android:textAppearance="@style/TextAppearance.AppCompat" />
-
-                <TextView
-                    android:id="@+id/outputAmericanPutVegaLabelTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/border"
-                    android:paddingEnd="4dp"
-                    android:paddingStart="4dp"
-                    android:text="@string/put_vega_label"
-                    android:textAppearance="@style/TextAppearance.AppCompat"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/outputAmericanPutVegaTextView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/border"
-                    android:paddingEnd="4dp"
-                    android:paddingStart="4dp"
-                    android:text="@string/output_default"
-                    android:textAlignment="center"
-                    android:textAppearance="@style/TextAppearance.AppCompat" />
-            </TableRow>
-        </TableLayout>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/border"
-        android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/output">
-
-        <TableLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:stretchColumns="*"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/outputAmerican">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/european_options_label"
-                android:textAlignment="center"
-                android:textAppearance="@style/TextAppearance.AppCompat"
-                android:textStyle="bold" />
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <TextView
-                    android:id="@+id/outputEuropeanCallPriceLabelTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/border"
-                    android:paddingEnd="4dp"
-                    android:paddingStart="4dp"
-                    android:text="@string/call_price_label"
-                    android:textAppearance="@style/TextAppearance.AppCompat"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/outputEuropeanCallPriceTextView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/border"
-                    android:paddingEnd="4dp"
-                    android:paddingStart="4dp"
-                    android:text="@string/output_default"
-                    android:textAlignment="center"
-                    android:textAppearance="@style/TextAppearance.AppCompat" />
-
-                <TextView
-                    android:id="@+id/outputEuropeanPutPriceLabelTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/border"
-                    android:paddingEnd="4dp"
-                    android:paddingStart="4dp"
-                    android:text="@string/put_price_label"
-                    android:textAppearance="@style/TextAppearance.AppCompat"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/outputEuropeanPutPriceTextView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/border"
-                    android:paddingEnd="4dp"
-                    android:paddingStart="4dp"
-                    android:text="@string/output_default"
-                    android:textAlignment="center"
-                    android:textAppearance="@style/TextAppearance.AppCompat" />
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <TextView
-                    android:id="@+id/outputEuropeanCallDeltaLabelTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/border"
-                    android:paddingEnd="4dp"
-                    android:paddingStart="4dp"
-                    android:text="@string/call_delta_label"
-                    android:textAppearance="@style/TextAppearance.AppCompat"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/outputEuropeanCallDeltaTextView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/border"
-                    android:paddingEnd="4dp"
-                    android:paddingStart="4dp"
-                    android:text="@string/output_default"
-                    android:textAlignment="center"
-                    android:textAppearance="@style/TextAppearance.AppCompat" />
-
-                <TextView
-                    android:id="@+id/outputEuropeanPutDeltaLabelTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/border"
-                    android:paddingEnd="4dp"
-                    android:paddingStart="4dp"
-                    android:text="@string/put_delta_label"
-                    android:textAppearance="@style/TextAppearance.AppCompat"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/outputEuropeanPutDeltaTextView"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/border"
-                    android:paddingEnd="4dp"
-                    android:paddingStart="4dp"
-                    android:text="@string/output_default"
-                    android:textAlignment="center"
-                    android:textAppearance="@style/TextAppearance.AppCompat" />
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <TextView
-                    android:id="@+id/outputEuropeanCallGammaLabelTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/border"
-                    android:paddingEnd="4dp"
-                    android:paddingStart="4dp"
-                    android:text="@string/call_gamma_label"
-                    android:textAppearance="@style/TextAppearance.AppCompat"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/outputEuropeanCallGammaTextView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/border"
-                    android:paddingEnd="4dp"
-                    android:paddingStart="4dp"
-                    android:text="@string/output_default"
-                    android:textAlignment="center"
-                    android:textAppearance="@style/TextAppearance.AppCompat" />
-
-                <TextView
-                    android:id="@+id/outputEuropeanPutGammaLabelTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/border"
-                    android:paddingEnd="4dp"
-                    android:paddingStart="4dp"
-                    android:text="@string/put_gamma_label"
-                    android:textAppearance="@style/TextAppearance.AppCompat"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/outputEuropeanPutGammaTextView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/border"
-                    android:paddingEnd="4dp"
-                    android:paddingStart="4dp"
-                    android:text="@string/output_default"
-                    android:textAlignment="center"
-                    android:textAppearance="@style/TextAppearance.AppCompat" />
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <TextView
-                    android:id="@+id/outputEuropeanCallVegaLabelTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/border"
-                    android:paddingEnd="4dp"
-                    android:paddingStart="4dp"
-                    android:text="@string/call_vega_label"
-                    android:textAppearance="@style/TextAppearance.AppCompat"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/outputEuropeanCallVegaTextView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/border"
-                    android:paddingEnd="4dp"
-                    android:paddingStart="4dp"
-                    android:text="@string/output_default"
-                    android:textAlignment="center"
-                    android:textAppearance="@style/TextAppearance.AppCompat" />
-
-                <TextView
-                    android:id="@+id/outputEuropeanPutVegaLabelTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/border"
-                    android:paddingEnd="4dp"
-                    android:paddingStart="4dp"
-                    android:text="@string/put_vega_label"
-                    android:textAppearance="@style/TextAppearance.AppCompat"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/outputEuropeanPutVegaTextView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/border"
-                    android:paddingEnd="4dp"
-                    android:paddingStart="4dp"
-                    android:text="@string/output_default"
-                    android:textAlignment="center"
-                    android:textAppearance="@style/TextAppearance.AppCompat" />
-
-            </TableRow>
-
-        </TableLayout>
-
-    </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>
